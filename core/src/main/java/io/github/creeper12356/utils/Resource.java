@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import io.github.creeper12356.core.Player;
+
 // import io.github.creeper12356.core.Player;
 
 public class Resource {
@@ -42,7 +44,7 @@ public class Resource {
     public static int HGAB;
     public static int VGAB;
     // public static MainView aMainView;
-    // public static Player[] players;
+    public static Player[] players;
     public static int gameMode;
     public static int playerCnt;
     public static int stageNum;
@@ -87,16 +89,18 @@ public class Resource {
     public static final int KEY_NUM9 = 57;
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
-    // public static Image imgBackBuffer;
-    // public static Image[] imgDiaAvt;
-    // public static Image[] imgSmallNum;
-    // public static Image[] imgBigNum;
-    // public static Image[] imgArrow;
-    // public static Image[] imgBallonChip;
-    // public static Image[] imgPlayer;
-    // public static Image[] imgEnemy;
-    // public static Image[] imgPanelEdge;
-    // public static Image[] imgButton;
+    public static Texture imgBackBuffer;
+
+    
+    public static Texture[] imgDiaAvt; // 棋子头像图片
+    public static Texture[] imgSmallNum;
+    public static Texture[] imgBigNum;
+    public static Texture[] imgArrow;
+    public static Texture[] imgBallonChip;
+    public static Texture[] imgPlayer;
+    public static Texture[] imgEnemy;
+    public static Texture[] imgPanelEdge;
+    public static Texture[] imgButton;
     public static Random rand;
     public static XTimer aTimer2;
     // public static PointMgr pointMgr;
