@@ -10,12 +10,12 @@ package io.github.creeper12356.utils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import javax.microedition.lcdui.Display;
-import javax.microedition.media.Manager;
-import javax.microedition.midlet.MIDlet;
+// import javax.microedition.lcdui.Display;
+// import javax.microedition.media.Manager;
+// import javax.microedition.midlet.MIDlet;
 
 public class Utils
-implements XTimerListener {
+ {
     public static final int SND_MOVE1 = 0;
     public static final int SND_MOVE2 = 1;
     public static final int SND_MOVE3 = 2;
@@ -53,8 +53,8 @@ implements XTimerListener {
     static boolean repeat;
     public static boolean checkPlaySound;
     static Utils aUtils;
-    static MMFPlayer mmfp;
-    static MMFPlayer[] midPlayers;
+    // static MMFPlayer mmfp;
+    // static MMFPlayer[] midPlayers;
     public static XTimer sndTimer;
     static ByteArrayInputStream[] soundis;
 
@@ -73,14 +73,14 @@ implements XTimerListener {
         return (byArray[n] & 0xFF) << 24 | (byArray[n + 1] & 0xFF) << 16 | (byArray[n + 2] & 0xFF) << 8 | byArray[n + 3] & 0xFF;
     }
 
-    public static void soundPlayInit() {
-        sndTimer = new XTimer(100L);
-        sndTimer.start();
-        sndTimer.cancel();
-        sndTimer.setTimerListener(aUtils);
-        sndTimer.setTime(100L);
-        sndTimer.resume();
-    }
+    // public static void soundPlayInit() {
+    //     sndTimer = new XTimer(100L);
+    //     sndTimer.start();
+    //     sndTimer.cancel();
+    //     sndTimer.setTimerListener(aUtils);
+    //     sndTimer.setTime(100L);
+    //     sndTimer.resume();
+    // }
 
     public static void playSound(int n, boolean bl) {
         checkPlaySound = true;
@@ -91,7 +91,7 @@ implements XTimerListener {
 
     public static void stopSound() {
         repeat = false;
-        mmfp.stop();
+        // mmfp.stop();
     }
 
     public static void loadSoundIS() {
@@ -121,31 +121,31 @@ implements XTimerListener {
         catch (Exception exception) {
             exception.printStackTrace();
         }
-        Utils.createPlayers();
+        // Utils.createPlayers();
     }
 
-    public static void createPlayers() {
-        try {
-            for (int i = 0; i < midPlayers.length; ++i) {
-                Utils.midPlayers[i] = new MMFPlayer();
-                Manager cfr_ignored_0 = Utils.midPlayers[i].sndManager;
-                Utils.midPlayers[i].sndPlayer = Manager.createPlayer((InputStream)soundis[i], (String)"audio/midi");
-                Utils.midPlayers[i].sndPlayer.realize();
-                Utils.midPlayers[i].sndPlayer.prefetch();
-                Utils.soundis[i] = null;
-            }
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+    // public static void createPlayers() {
+    //     try {
+    //         for (int i = 0; i < midPlayers.length; ++i) {
+    //             Utils.midPlayers[i] = new MMFPlayer();
+    //             Manager cfr_ignored_0 = Utils.midPlayers[i].sndManager;
+    //             Utils.midPlayers[i].sndPlayer = Manager.createPlayer((InputStream)soundis[i], (String)"audio/midi");
+    //             Utils.midPlayers[i].sndPlayer.realize();
+    //             Utils.midPlayers[i].sndPlayer.prefetch();
+    //             Utils.soundis[i] = null;
+    //         }
+    //     }
+    //     catch (Exception exception) {
+    //         exception.printStackTrace();
+    //     }
+    // }
 
-    public static void PlayMid(int n) {
-        if (repeat) {
-            Utils.midPlayers[n].sndPlayer.setLoopCount(-1);
-        }
-        midPlayers[n].play(repeat);
-    }
+    // public static void PlayMid(int n) {
+    //     if (repeat) {
+    //         Utils.midPlayers[n].sndPlayer.setLoopCount(-1);
+    //     }
+    //     midPlayers[n].play(repeat);
+    // }
 
     public static byte[] loadClip(String string) {
         byte[] byArray = null;
@@ -162,45 +162,45 @@ implements XTimerListener {
         return byArray;
     }
 
-    public static void loadClip2(ByteArrayInputStream byteArrayInputStream) {
-        if (byteArrayInputStream.available() == 0) {
-            byteArrayInputStream.reset();
-        }
-        try {
-            Manager cfr_ignored_0 = Utils.mmfp.sndManager;
-            Utils.mmfp.sndPlayer = Manager.createPlayer((InputStream)byteArrayInputStream, (String)"audio/midi");
-            Utils.mmfp.sndPlayer.realize();
-            Utils.mmfp.sndPlayer.prefetch();
-            if (repeat) {
-                Utils.mmfp.sndPlayer.setLoopCount(-1);
-            }
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+    // public static void loadClip2(ByteArrayInputStream byteArrayInputStream) {
+    //     if (byteArrayInputStream.available() == 0) {
+    //         byteArrayInputStream.reset();
+    //     }
+    //     try {
+    //         Manager cfr_ignored_0 = Utils.mmfp.sndManager;
+    //         Utils.mmfp.sndPlayer = Manager.createPlayer((InputStream)byteArrayInputStream, (String)"audio/midi");
+    //         Utils.mmfp.sndPlayer.realize();
+    //         Utils.mmfp.sndPlayer.prefetch();
+    //         if (repeat) {
+    //             Utils.mmfp.sndPlayer.setLoopCount(-1);
+    //         }
+    //     }
+    //     catch (Exception exception) {
+    //         exception.printStackTrace();
+    //     }
+    // }
 
-    public static void checkPlaySound() {
-        if (Resource.soundVolume == 0) {
-            return;
-        }
-        if (currentSoundID < midPlayers.length) {
-            Utils.PlayMid(currentSoundID);
-        } else {
-            if (lastSoundID != currentSoundID) {
-                mmfp.close();
-                Utils.loadClip2(soundis[currentSoundID]);
-            }
-            mmfp.play(repeat);
-        }
-        checkPlaySound = false;
-    }
+    // public static void checkPlaySound() {
+    //     if (Resource.soundVolume == 0) {
+    //         return;
+    //     }
+    //     if (currentSoundID < midPlayers.length) {
+    //         Utils.PlayMid(currentSoundID);
+    //     } else {
+    //         if (lastSoundID != currentSoundID) {
+    //             mmfp.close();
+    //             Utils.loadClip2(soundis[currentSoundID]);
+    //         }
+    //         mmfp.play(repeat);
+    //     }
+    //     checkPlaySound = false;
+    // }
 
-    public static void playVib(int n) {
-        if (Resource.vibSwitch == 1) {
-            Display.getDisplay((MIDlet)DiaGameCard.diaapp).vibrate(100);
-        }
-    }
+    // public static void playVib(int n) {
+    //     if (Resource.vibSwitch == 1) {
+    //         Display.getDisplay((MIDlet)DiaGameCard.diaapp).vibrate(100);
+    //     }
+    // }
 
     public static void stopVib() {
     }
@@ -229,37 +229,37 @@ implements XTimerListener {
     public static void setVolume() {
     }
 
-    public static void vibSwitchToggle() {
-        Resource.vibSwitch = Resource.vibSwitch == 0 ? 1 : 0;
-        Utils.playVib(2);
-    }
+    // public static void vibSwitchToggle() {
+    //     Resource.vibSwitch = Resource.vibSwitch == 0 ? 1 : 0;
+    //     Utils.playVib(2);
+    // }
 
-    public static void gamespeedChange(int n) {
-        if (n == 3) {
-            if (Resource.gameSpeed > 50) {
-                Resource.gameSpeed -= 50;
-            }
-        } else if (n == 4) {
-            if (Resource.gameSpeed < 150) {
-                Resource.gameSpeed += 50;
-            }
-        } else if (n == 5 && (Resource.gameSpeed -= 50) < 50) {
-            Resource.gameSpeed = 150;
-        }
-        Resource.aTimer2.setTime(Resource.gameSpeed);
-        Resource.aTimer2.resume();
-    }
+    // public static void gamespeedChange(int n) {
+    //     if (n == 3) {
+    //         if (Resource.gameSpeed > 50) {
+    //             Resource.gameSpeed -= 50;
+    //         }
+    //     } else if (n == 4) {
+    //         if (Resource.gameSpeed < 150) {
+    //             Resource.gameSpeed += 50;
+    //         }
+    //     } else if (n == 5 && (Resource.gameSpeed -= 50) < 50) {
+    //         Resource.gameSpeed = 150;
+    //     }
+    //     Resource.aTimer2.setTime(Resource.gameSpeed);
+    //     Resource.aTimer2.resume();
+    // }
 
-    public void performed(XTimer xTimer) {
-        if (checkPlaySound) {
-            Utils.checkPlaySound();
-        }
-    }
+    // public void performed(XTimer xTimer) {
+    //     if (checkPlaySound) {
+    //         Utils.checkPlaySound();
+    //     }
+    // }
 
-    static {
-        aUtils = new Utils();
-        mmfp = new MMFPlayer();
-        midPlayers = new MMFPlayer[5];
-        soundis = new ByteArrayInputStream[21];
-    }
+    // static {
+    //     aUtils = new Utils();
+    //     mmfp = new MMFPlayer();
+    //     midPlayers = new MMFPlayer[5];
+    //     soundis = new ByteArrayInputStream[21];
+    // }
 }

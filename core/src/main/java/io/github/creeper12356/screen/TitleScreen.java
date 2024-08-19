@@ -1,7 +1,9 @@
 package io.github.creeper12356.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,13 +22,12 @@ public class TitleScreen implements Screen {
 
     private BitmapFont font;
 
-    int state = 1;
+    int state = LOGO;
     int process = 1;
     long time;
     // Animation aniJumpAvata;
 
-    @Override
-    public void show() {
+    public TitleScreen() {
         batch = new SpriteBatch();
 
         imgMobilebus = Resource.loadImage("mobilebus.png");
@@ -39,48 +40,56 @@ public class TitleScreen implements Screen {
         // Resource.halfWidth - this.imgTitleChip[1].getWidth() / 2, 36, 20);
         // this.aniJumpAvata = new Animation();
         // this.aniJumpAvata.init(4, 200, true);
+
+        font = new BitmapFont();
+        font.setColor(Color.BLACK);
+    }
+    @Override
+    public void show() {
+        
     }
 
     @Override
     public void render(float delta) {
-        batch.begin();
-        batch.draw(imgBackground, 0, 0);
-        batch.draw(imgTitleChip[1], Resource.halfWidth - imgTitleChip[1].getWidth() / 2, 36);
-        batch.end();
+        // batch.begin();
+        // batch.draw(imgBackground, 0, 0);
+        // batch.draw(imgTitleChip[1], Resource.halfWidth - imgTitleChip[1].getWidth() /
+        // 2, 36);
+        // batch.end();
 
         if (this.state == LOGO) {
             if (this.process == 1) {
-                this.time = System.currentTimeMillis();
+                this.time = 0;
                 ++this.process;
             } else if (this.process == 2) {
-                if (System.currentTimeMillis() - this.time > 1500L) {
+                if (this.time > 1500L) {
                     ++this.process;
                 }
             }
+            time += delta * 1000;
             batch.begin();
-            batch.setColor(Color.WHITE);
+            Gdx.gl.glClearColor(1, 1, 1, 1); // 设置清屏颜色为白色
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // 清屏
             if (this.process <= 2) {
-                // TODO: anchor: CENTER, LEFTBOTTOM, RIGHTBOTTOM
-                batch.draw(imgMobilebus, Resource.halfWidth, Resource.halfHeight);
+                batch.draw(imgMobilebus, 0, Gdx.graphics.getHeight() / 2 - imgMobilebus.getHeight() / 2);
             } else if (this.process == 3) {
                 // graphics.setFont(Resource.sf);
-                font.setColor(Color.BLACK);
-                font.draw(batch, "是否开启声音？", Resource.halfWidth, Resource.halfHeight);
-                font.draw(batch, "是", 3, Resource.totalHeight - 3);
-                font.draw(batch, "否", Resource.totalWidth - 3, Resource.totalHeight - 3);
-
-                // graphics.drawString("是否开启声音？", Resource.halfWidth,
-                // Resource.halfHeight, 1 | 0x10);
-                // graphics.drawString("是", 3, Resource.totalHeight - 3, 4 | 0x20);
-                // graphics.drawString("否", Resource.totalWidth - 3, Resource.totalHeight - 3, 8
-                // | 0x20);
+                Resource.drawStringAtCenter("是否开启声音", font, batch);
+                Resource.drawStringAtBottomLeft("是", font, batch);
+                Resource.drawStringAtBottomRight("否", font, batch);
             }
+            batch.end();
         } else if (this.state == TITLE) {
-            // int[] nArray = new int[] { 0, 1, 2, 1 };
             if (this.process == 0) {
                 // Utils.playSound(9, false);
                 ++this.process;
             }
+            batch.begin();
+            batch.draw(imgBackground, 0, 0);
+            Resource.drawImageAtBottom(imgTitleChip[0], batch);
+            Resource.drawImageAtCenter(imgTitleChip[1], batch);
+            batch.end();
+
             // graphics.drawImage(Resource.imgBackBuffer, 0, 0, 4 | 0x10);
             // if (this.aniJumpAvata.getFrame() != 0) {
             // graphics.drawImage(this.imgTitleChip[0], Resource.halfWidth -
