@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import io.github.creeper12356.Animation;
 import io.github.creeper12356.utils.Resource;
 
 public class TitleScreen implements Screen {
@@ -22,10 +23,10 @@ public class TitleScreen implements Screen {
 
     private BitmapFont font;
 
-    int state = LOGO;
+    int state = TITLE;
     int process = 1;
     long time;
-    // Animation aniJumpAvata;
+    Animation aniJumpAvata;
 
     public TitleScreen() {
         batch = new SpriteBatch();
@@ -35,18 +36,16 @@ public class TitleScreen implements Screen {
         imgTitleChip[1] = Resource.loadImage("titlechip_1.png");
         imgCharBig = Resource.loadImage("charbig.png");
         imgBackground = Resource.loadImage("background.png");
-        // Resource.getBackBuffer().drawImage(backgroundImage, 0, 0, 0);
-        // Resource.getBackBuffer().drawImage(this.imgTitleChip[1],
-        // Resource.halfWidth - this.imgTitleChip[1].getWidth() / 2, 36, 20);
-        // this.aniJumpAvata = new Animation();
-        // this.aniJumpAvata.init(4, 200, true);
+        this.aniJumpAvata = new Animation();
+        this.aniJumpAvata.init(4, 200, true);
 
         font = new BitmapFont();
         font.setColor(Color.BLACK);
     }
+
     @Override
     public void show() {
-        
+
     }
 
     @Override
@@ -57,7 +56,7 @@ public class TitleScreen implements Screen {
         // 2, 36);
         // batch.end();
 
-        if (this.state == LOGO) {
+        if (this.state == TITLE) {
             if (this.process == 1) {
                 this.time = 0;
                 ++this.process;
@@ -86,17 +85,13 @@ public class TitleScreen implements Screen {
             }
             batch.begin();
             batch.draw(imgBackground, 0, 0);
-            Resource.drawImageAtBottom(imgTitleChip[0], batch);
             Resource.drawImageAtCenter(imgTitleChip[1], batch);
+            
+            if (this.aniJumpAvata.getFrame() != 0) {
+                Resource.drawImageAtBottom(imgTitleChip[0], batch);
+            }
+            this.aniJumpAvata.frameProcess();
             batch.end();
-
-            // graphics.drawImage(Resource.imgBackBuffer, 0, 0, 4 | 0x10);
-            // if (this.aniJumpAvata.getFrame() != 0) {
-            // graphics.drawImage(this.imgTitleChip[0], Resource.halfWidth -
-            // this.imgTitleChip[0].getWidth() / 2,
-            // Resource.totalHeight - 36, 0);
-            // }
-            // this.aniJumpAvata.frameProcess();
         }
     }
 
