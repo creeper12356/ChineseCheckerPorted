@@ -677,9 +677,7 @@ public class Resource {
     static {
         generator = new FreeTypeFontGenerator(Gdx.files.internal("font/chinese.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.characters = "是否开启声音否";
-        parameter.color = Color.BLACK;
-        parameter.size = 24;
+        parameter.characters = "是否开启声音否故事模式对战模式游戏设置帮助特别菜单排行榜退出";
     }
     // static {
     // HGAB = 11;
