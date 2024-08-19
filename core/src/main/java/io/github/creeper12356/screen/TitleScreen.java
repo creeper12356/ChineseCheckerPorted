@@ -2,7 +2,6 @@ package io.github.creeper12356.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -38,9 +37,7 @@ public class TitleScreen implements Screen {
         imgBackground = Resource.loadImage("background.png");
         this.aniJumpAvata = new Animation();
         this.aniJumpAvata.init(4, 200, true);
-
-        font = new BitmapFont();
-        font.setColor(Color.BLACK);
+        font = Resource.generator.generateFont(Resource.parameter);
     }
 
     @Override

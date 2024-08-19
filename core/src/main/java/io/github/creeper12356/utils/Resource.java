@@ -9,12 +9,14 @@ import java.util.Random;
 // import javax.microedition.rms.RecordStoreException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
-import io.github.creeper12356.core.Player;
+// import io.github.creeper12356.core.Player;
 
 // import io.github.creeper12356.core.Player;
 
@@ -44,7 +46,7 @@ public class Resource {
     public static int HGAB;
     public static int VGAB;
     // public static MainView aMainView;
-    public static Player[] players;
+    // public static Player[] players;
     public static int gameMode;
     public static int playerCnt;
     public static int stageNum;
@@ -105,6 +107,10 @@ public class Resource {
     public static XTimer aTimer2;
     // public static PointMgr pointMgr;
     // public static Animation aniTalkButton;
+
+    public static FreeTypeFontGenerator generator;
+    public static FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+
 
     public static void checkScreenSize() {
         if (totalWidth > 118 && totalWidth < 122) {
@@ -667,7 +673,14 @@ public class Resource {
     // Resource.saveRank();
     // }
     // }
-
+    
+    static {
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("font/chinese.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.characters = "是否开启声音否";
+        parameter.color = Color.BLACK;
+        parameter.size = 24;
+    }
     // static {
     // HGAB = 11;
     // VGAB = 16;
