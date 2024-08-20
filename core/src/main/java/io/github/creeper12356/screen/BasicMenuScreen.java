@@ -1,6 +1,5 @@
 package io.github.creeper12356.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,9 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 
+import io.github.creeper12356.MyGame;
 import io.github.creeper12356.utils.Resource;
 
 public class BasicMenuScreen implements Screen {
+    protected MyGame myGame;
+
     private Stage stage;
     private Table table;
 
@@ -26,9 +28,11 @@ public class BasicMenuScreen implements Screen {
     private Texture imgTouchButtonOk;
     private Texture imgTouchButtonCancel;
 
-    public BasicMenuScreen(boolean okVisible, boolean cancelVisible) {
+    public BasicMenuScreen(MyGame myGame, boolean okVisible, boolean cancelVisible) {
+        this.myGame = myGame;
+
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+        // Gdx.input.setInputProcessor(stage);
 
         table = new Table();
         table.setFillParent(true);
@@ -62,7 +66,7 @@ public class BasicMenuScreen implements Screen {
             Stack stackCancel = getStackedImageButton(imgTouchButtonCancel, style, new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Cancel");
+                    BasicMenuScreen.this.myGame.navigateBack();
                 }
             });
             table.add(stackCancel).expandX().right();
@@ -121,7 +125,7 @@ public class BasicMenuScreen implements Screen {
         return stack;
     }
 
-    protected Stage getStage() {
+    public Stage getStage() {
         return stage;
     }
 

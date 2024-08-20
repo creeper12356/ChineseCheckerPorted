@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import io.github.creeper12356.MyGame;
 import io.github.creeper12356.utils.Resource;
 
 public class MainMenuScreen extends BasicMenuScreen {
@@ -23,10 +24,10 @@ public class MainMenuScreen extends BasicMenuScreen {
     private Texture[] imgMenuTextUp = new Texture[7];
     private Texture[] imgMenuTextDown = new Texture[7];
 
-    public MainMenuScreen() {
-        super(false, false);
+    public MainMenuScreen(MyGame myGame) {
+        super(myGame, false, false);
+
         Stage stage = getStage();
-        Gdx.input.setInputProcessor(stage);
 
         imgBackgroundMenu = Resource.loadImage("bgmenu.png");
         Image imgMenu = new Image(imgBackgroundMenu);
@@ -45,7 +46,7 @@ public class MainMenuScreen extends BasicMenuScreen {
         addImageButton(imgMenuTextUp[0], imgMenuTextDown[0], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Play");
+                MainMenuScreen.this.myGame.setScreen(1);
             }
         });
 
@@ -87,7 +88,7 @@ public class MainMenuScreen extends BasicMenuScreen {
         addImageButton(imgMenuTextUp[6], imgMenuTextDown[6], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Exit");
+                Gdx.app.exit();
             }
         });
 

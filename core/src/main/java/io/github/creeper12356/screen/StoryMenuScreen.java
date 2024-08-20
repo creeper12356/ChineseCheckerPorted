@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import io.github.creeper12356.MyGame;
 import io.github.creeper12356.utils.Resource;
 
 public class StoryMenuScreen extends BasicMenuScreen {
@@ -19,8 +20,9 @@ public class StoryMenuScreen extends BasicMenuScreen {
     private Texture imgTextNew;
     private Texture imgTextContinue;
 
-    public StoryMenuScreen() {
-        super(true, true);
+    public StoryMenuScreen(MyGame myGame) {
+        super(myGame, false, true);
+
         Stage stage = getStage();
 
         table = new Table();
