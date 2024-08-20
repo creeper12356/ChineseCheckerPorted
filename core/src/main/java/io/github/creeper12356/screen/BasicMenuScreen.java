@@ -8,11 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Scaling;
 
 import io.github.creeper12356.MyGame;
 import io.github.creeper12356.utils.Resource;
@@ -24,7 +22,6 @@ public class BasicMenuScreen implements Screen {
     private Table table;
 
     private Texture imgBackground;
-    private Texture imgTouchButtonBackground;
     private Texture imgTouchButtonOk;
     private Texture imgTouchButtonCancel;
 
@@ -39,7 +36,6 @@ public class BasicMenuScreen implements Screen {
 
         // 加载图片
         imgBackground = Resource.loadImage("background.png");
-        imgTouchButtonBackground = Resource.loadImage("touch/tbg.png");
         imgTouchButtonCancel = Resource.loadImage("touch/tc.png");
         imgTouchButtonOk = Resource.loadImage("touch/tok.png");
 
@@ -48,28 +44,25 @@ public class BasicMenuScreen implements Screen {
         img.setFillParent(true);
         stage.addActor(img);
 
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.up = new TextureRegionDrawable(new TextureRegion(imgTouchButtonBackground));
-
         // 底部Ok Cancel 布局
         table.bottom();
         if (okVisible) {
-            Stack stackOk = getStackedImageButton(imgTouchButtonOk, style, new ClickListener() {
+            ImageButton imageButtonOk = getImageButton(imgTouchButtonOk, imgTouchButtonOk, new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     System.out.println("Ok");
                 }
             });
-            table.add(stackOk).left().expandX();
+            table.add(imageButtonOk).left().expandX();
         }
         if (cancelVisible) {
-            Stack stackCancel = getStackedImageButton(imgTouchButtonCancel, style, new ClickListener() {
+            ImageButton imageButtonCancel = getImageButton(imgTouchButtonCancel, imgTouchButtonCancel, new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     BasicMenuScreen.this.myGame.navigateBack();
                 }
             });
-            table.add(stackCancel).expandX().right();
+            table.add(imageButtonCancel).expandX().right();
         }
 
         stage.addActor(table);
@@ -106,23 +99,18 @@ public class BasicMenuScreen implements Screen {
         stage.dispose();
 
         imgBackground.dispose();
-        imgTouchButtonBackground.dispose();
         imgTouchButtonOk.dispose();
         imgTouchButtonCancel.dispose();
     }
 
-    private Stack getStackedImageButton(Texture texture, ImageButton.ImageButtonStyle style, EventListener listener) {
-        Stack stack = new Stack();
-
-        Image img = new Image(texture);
-        img.setScaling(Scaling.fit);
-        stack.add(img);
+    protected ImageButton getImageButton(Texture upTexture, Texture downTexture, EventListener listener) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(new TextureRegion(upTexture));
+        style.down = new TextureRegionDrawable(new TextureRegion(downTexture));
 
         ImageButton button = new ImageButton(style);
         button.addListener(listener);
-        stack.add(button);
-
-        return stack;
+        return button;
     }
 
     public Stage getStage() {

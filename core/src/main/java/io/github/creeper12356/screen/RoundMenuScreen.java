@@ -3,7 +3,11 @@ package io.github.creeper12356.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import io.github.creeper12356.MyGame;
 import io.github.creeper12356.core.Player;
@@ -13,25 +17,67 @@ import io.github.creeper12356.utils.Resource;
 public class RoundMenuScreen extends BasicMenuScreen {
     private RectangleActor rectangleActor;
     private SpriteBatch batch;
+    private Table tableOption;
 
     private Texture[] imgSelDia = new Texture[2]; // 引用Resource的图片，无需dispose
     private Texture[] imgButton = new Texture[4];
     private Texture imgRound; // "关卡"
     private Texture imgStage; // "第几关"
 
+    private Texture imgButtonOk;
+    private Texture imgButtonLeft;
+    private Texture imgButtonRight;
+
     public RoundMenuScreen(MyGame myGame) {
         super(myGame, false, false);
 
         Stage stage = getStage();
-        rectangleActor = new RectangleActor();
-        stage.addActor(rectangleActor);
 
         batch = new SpriteBatch();
+
+        rectangleActor = new RectangleActor();
+        stage.addActor(rectangleActor);
 
         this.imgButton[0] = Resource.loadImage("button_move.png");
         this.imgButton[1] = Resource.loadImage("button_ok.png");
 
         this.imgRound = Resource.loadImage("roundchip_3.png");
+
+        this.imgButtonOk = Resource.loadImage("touch/tok.png");
+        this.imgButtonLeft = Resource.loadImage("touch/tl.png");
+        this.imgButtonRight = Resource.loadImage("touch/tr.png");
+
+        tableOption = new Table();
+        tableOption.setFillParent(true);
+        stage.addActor(tableOption);
+
+        ImageButton imageButtonOk = getImageButton(imgButtonOk, imgButtonOk, new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Ok");
+            }
+        });
+        ImageButton imageButtonLeft = getImageButton(imgButtonLeft, imgButtonLeft, new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Resource.players[0].setDiaType((Resource.players[0].getDiaType() + 24) % 25);
+                RoundMenuScreen.this.imgSelDia[0] = Resource.imgDiaAvt[Resource.players[0].getDiaType()];
+            }
+        });
+        ImageButton imageButtonRight = getImageButton(imgButtonRight, imgButtonRight, new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO: 玩家可选的棋子有限制
+                Resource.players[0].setDiaType((Resource.players[0].getDiaType() + 1) % 25);
+                RoundMenuScreen.this.imgSelDia[0] = Resource.imgDiaAvt[Resource.players[0].getDiaType()];
+            }
+        });
+
+        tableOption.bottom().right();
+        tableOption.add(imageButtonLeft).padRight(5);
+        tableOption.add(imageButtonRight).padRight(5);
+        tableOption.add(imageButtonOk).padRight(5);
+
     }
 
     @Override
@@ -85,8 +131,8 @@ public class RoundMenuScreen extends BasicMenuScreen {
     public void render(float delta) {
         super.render(delta);
 
-        int n9 = 108;
-        int n10 = 0;
+        // int n9 = 108;
+        // int n10 = 0;
         // if (this.aniArrow.getType() == 0 && this.aniArrow.getFrame() == 0) {
         // n10 = -2;
         // } else if (this.aniArrow.getType() == 1 && this.aniArrow.getFrame() == 0) {
@@ -208,6 +254,11 @@ public class RoundMenuScreen extends BasicMenuScreen {
         for (int i = 0; i < 4; ++i) {
             imgButton[i].dispose();
         }
+
+        imgButtonOk.dispose();
+        imgButtonLeft.dispose();
+        imgButtonRight.dispose();
+
         batch.dispose();
         super.dispose();
     }

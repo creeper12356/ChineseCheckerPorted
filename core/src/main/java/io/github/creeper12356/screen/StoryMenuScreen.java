@@ -42,7 +42,7 @@ public class StoryMenuScreen extends BasicMenuScreen {
         addImageButton(imgTextContinue, imgTextContinue, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Continue");
+                StoryMenuScreen.this.myGame.setScreen(2);
             }
         });
 
