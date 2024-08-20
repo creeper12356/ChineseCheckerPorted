@@ -1,7 +1,6 @@
 package io.github.creeper12356.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -16,24 +15,18 @@ import com.badlogic.gdx.utils.Align;
 
 import io.github.creeper12356.utils.Resource;
 
-public class MainMenuScreen implements Screen {
-    private Stage stage;
+public class MainMenuScreen extends BasicMenuScreen {
     private Table table;
 
-    private Texture imgBackground;
     private Texture imgBackgroundMenu;
 
     private Texture[] imgMenuTextUp = new Texture[7];
     private Texture[] imgMenuTextDown = new Texture[7];
 
     public MainMenuScreen() {
-        stage = new Stage();
+        super(false, false);
+        Stage stage = getStage();
         Gdx.input.setInputProcessor(stage);
-
-        imgBackground = Resource.loadImage("background.png");
-        Image img = new Image(imgBackground);
-        img.setFillParent(true);
-        stage.addActor(img);
 
         imgBackgroundMenu = Resource.loadImage("bgmenu.png");
         Image imgMenu = new Image(imgBackgroundMenu);
@@ -101,42 +94,14 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void show() {
-    }
-
-    @Override
-    public void render(float delta) {
-        stage.act(delta);
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
     public void dispose() {
-        stage.dispose();
-
-        imgBackground.dispose();
         imgBackgroundMenu.dispose();
 
         for (int i = 0; i < 7; ++i) {
             imgMenuTextUp[i].dispose();
             imgMenuTextDown[i].dispose();
         }
+        super.dispose();
     }
 
     private void addImageButton(Texture upTexture, Texture downTexture, EventListener listener) {
