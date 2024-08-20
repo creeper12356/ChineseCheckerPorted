@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 
 import io.github.creeper12356.screen.BasicMenuScreen;
 import io.github.creeper12356.screen.MainMenuScreen;
+import io.github.creeper12356.screen.RoundMenuScreen;
 import io.github.creeper12356.screen.StoryMenuScreen;
 import io.github.creeper12356.utils.Resource;
 
@@ -37,12 +38,14 @@ public class MyGame extends Game {
     public void create() {
         screens[0] = new MainMenuScreen(this);
         screens[1] = new StoryMenuScreen(this);
-        setScreen(0);
+        // setScreen(0);
+        setScreen(new RoundMenuScreen(this));
     }
 
     @Override
     public void dispose() {
-        Resource.generator.dispose();
+        Resource.dispose();
+
         screens[0].dispose();
         screens[1].dispose();
         System.out.println("Game disposed");

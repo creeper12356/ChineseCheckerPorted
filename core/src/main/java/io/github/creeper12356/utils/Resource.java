@@ -9,12 +9,13 @@ import java.util.Random;
 // import javax.microedition.rms.RecordStoreException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+
+import io.github.creeper12356.core.Player;
 
 // import io.github.creeper12356.core.Player;
 
@@ -46,7 +47,7 @@ public class Resource {
     public static int HGAB;
     public static int VGAB;
     // public static MainView aMainView;
-    // public static Player[] players;
+    public static Player[] players;
     public static int gameMode;
     public static int playerCnt;
     public static int stageNum;
@@ -67,10 +68,10 @@ public class Resource {
     public static byte[] enableDiaList;
     public static boolean bOpenSpecialGame;
     // public static Font sf;
-    // public static final byte[] homes;
-    // public static final byte[] targetHome;
-    // public static final int[] hInc;
-    // public static final int[] vInc;
+    public static final byte[] homes;
+    public static final byte[] targetHome;
+    public static final int[] hInc;
+    public static final int[] vInc;
     public static final int KEY_LEFT = -3;
     public static final int KEY_RIGHT = -4;
     public static final int KEY_UP = -1;
@@ -93,7 +94,6 @@ public class Resource {
     public static final int KEY_POUND = 35;
     public static Texture imgBackBuffer;
 
-    
     public static Texture[] imgDiaAvt; // 棋子头像图片
     public static Texture[] imgSmallNum;
     public static Texture[] imgBigNum;
@@ -110,7 +110,6 @@ public class Resource {
 
     public static FreeTypeFontGenerator generator;
     public static FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-
 
     public static void checkScreenSize() {
         if (totalWidth > 118 && totalWidth < 122) {
@@ -145,6 +144,19 @@ public class Resource {
         return new Texture(Gdx.files.internal(filename));
     }
 
+    /**
+     * @brief 释放oldTexture，加载新的图片
+     * @param oldTexture
+     * @param filename
+     * @return
+     */
+    public static Texture replaceTexture(Texture oldTexture, String filename) {
+        if(oldTexture != null) {
+            oldTexture.dispose();
+        }
+        return loadImage(filename);
+    }
+
     public static int Fast_Distance(int n, int n2) {
         n = Math.abs(n);
         n2 = Math.abs(n2);
@@ -153,7 +165,8 @@ public class Resource {
     }
 
     public static void drawImageAtCenter(Texture img, SpriteBatch batch) {
-        batch.draw(img, Gdx.graphics.getWidth() / 2 - img.getWidth() / 2, Gdx.graphics.getHeight() / 2 - img.getHeight() / 2);
+        batch.draw(img, Gdx.graphics.getWidth() / 2 - img.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2 - img.getHeight() / 2);
     }
 
     public static void drawImageAtBottom(Texture img, SpriteBatch batch) {
@@ -673,44 +686,72 @@ public class Resource {
     // Resource.saveRank();
     // }
     // }
-    
+
     static {
         generator = new FreeTypeFontGenerator(Gdx.files.internal("font/chinese.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.characters = "是否开启声音否故事模式对战模式游戏设置帮助特别菜单排行榜退出";
+
+
+        HGAB = 11;
+        VGAB = 16;
+        players = new Player[3];
+        for(int i = 0;i < 3;++i) {
+            players[i] = new Player(i);
+        }
+        stageClear = new byte[6];
+        gameSpeed = 100;
+        soundVolume = 20;
+        vibSwitch = 1;
+        enableDiaList = new byte[25];
+        // sf = Font.getFont((int) 0, (int) 0, (int) 8);
+        homes = new byte[] { 9, 12, 8, 11, 10, 11, 7, 10, 9, 10, 11, 10, 6, 9, 8, 9,
+                10, 9, 12, 9, 0, 9, 1, 8, 2, 9, 2,
+                7, 3, 8, 4, 9, 3, 6, 4, 7, 5, 8, 6, 9, 0, 3, 2, 3, 1, 4, 4, 3, 3, 4, 2, 5, 6,
+                3, 5, 4, 4, 5, 3, 6, 9, 0,
+                10, 1, 8, 1, 11, 2, 9, 2, 7, 2, 12, 3, 10, 3, 8, 3, 6, 3, 18, 3, 17, 4, 16,
+                3, 16, 5, 15, 4, 14, 3, 15,
+                6, 14, 5, 13, 4, 12, 3, 18, 9, 16, 9, 17, 8, 14, 9, 15, 8, 16, 7, 12, 9, 13,
+                8, 14, 7, 15, 6 };
+        targetHome = new byte[] { 9, 0, 18, 3, 18, 9, 9, 12, 0, 9, 0, 3 };
+        hInc = new int[] { -1, 1, 2, 1, -1, -2 };
+        vInc = new int[] { -1, -1, 0, 1, 1, 0 };
+        imgDiaAvt = new Texture[25];
+        imgSmallNum = new Texture[10];
+        imgBigNum = new Texture[10];
+        imgArrow = new Texture[4];
+        imgBallonChip = new Texture[5];
+        imgPlayer = new Texture[3];
+        imgEnemy = new Texture[3];
+        imgPanelEdge = new Texture[4];
+        imgButton = new Texture[2];
+        rand = new Random(System.currentTimeMillis());
+        // pointMgr = new PointMgr();
+        // aniTalkButton = new Animation();
     }
-    // static {
-    // HGAB = 11;
-    // VGAB = 16;
-    // players = new Player[3];
-    // stageClear = new byte[6];
-    // gameSpeed = 100;
-    // soundVolume = 20;
-    // vibSwitch = 1;
-    // enableDiaList = new byte[25];
-    // sf = Font.getFont((int) 0, (int) 0, (int) 8);
-    // homes = new byte[] { 9, 12, 8, 11, 10, 11, 7, 10, 9, 10, 11, 10, 6, 9, 8, 9,
-    // 10, 9, 12, 9, 0, 9, 1, 8, 2, 9, 2,
-    // 7, 3, 8, 4, 9, 3, 6, 4, 7, 5, 8, 6, 9, 0, 3, 2, 3, 1, 4, 4, 3, 3, 4, 2, 5, 6,
-    // 3, 5, 4, 4, 5, 3, 6, 9, 0,
-    // 10, 1, 8, 1, 11, 2, 9, 2, 7, 2, 12, 3, 10, 3, 8, 3, 6, 3, 18, 3, 17, 4, 16,
-    // 3, 16, 5, 15, 4, 14, 3, 15,
-    // 6, 14, 5, 13, 4, 12, 3, 18, 9, 16, 9, 17, 8, 14, 9, 15, 8, 16, 7, 12, 9, 13,
-    // 8, 14, 7, 15, 6 };
-    // targetHome = new byte[] { 9, 0, 18, 3, 18, 9, 9, 12, 0, 9, 0, 3 };
-    // hInc = new int[] { -1, 1, 2, 1, -1, -2 };
-    // vInc = new int[] { -1, -1, 0, 1, 1, 0 };
-    // imgDiaAvt = new Image[25];
-    // imgSmallNum = new Image[10];
-    // imgBigNum = new Image[10];
-    // imgArrow = new Image[4];
-    // imgBallonChip = new Image[5];
-    // imgPlayer = new Image[3];
-    // imgEnemy = new Image[3];
-    // imgPanelEdge = new Image[4];
-    // imgButton = new Image[2];
-    // rand = new Random(System.currentTimeMillis());
-    // pointMgr = new PointMgr();
-    // aniTalkButton = new Animation();
-    // }
+
+    public static void dispose() {
+        generator.dispose();
+
+        disposeImageArray(imgDiaAvt);
+        disposeImageArray(imgSmallNum);
+        disposeImageArray(imgBigNum);
+        disposeImageArray(imgArrow);
+        disposeImageArray(imgBallonChip);
+        disposeImageArray(imgPlayer);
+        disposeImageArray(imgEnemy);
+        disposeImageArray(imgPanelEdge);
+        disposeImageArray(imgButton);
+    }
+
+    private static void disposeImage(Texture img) {
+        if(img != null) {
+            img.dispose();
+        }
+    }
+    private static void disposeImageArray(Texture[] imgArray) {
+        for(Texture img : imgArray) {
+            disposeImage(img);
+        }
+    }
 }

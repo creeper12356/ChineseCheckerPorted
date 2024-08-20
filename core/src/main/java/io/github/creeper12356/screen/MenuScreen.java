@@ -979,6 +979,7 @@
 //                     }
 //                     graphics.setColor(255, 255, 255);
 //                     graphics.setFont(Resource.sf);
+//                                         // 选择您比赛的马
 //                     graphics.drawString("\u9009\u62e9\u60a8\u6bd4\u8d5b\u7684\u9a6c", 2,
 //                             Resource.totalHeight - this.imgButton[0].getHeight() - 15, 4 | 0x10);
 //                     graphics.drawImage(this.imgButton[0], 2, Resource.totalHeight - this.imgButton[0].getHeight(),
@@ -1058,10 +1059,14 @@
 //                 graphics.setColor(106, 90, 24);
 //                 graphics.setFont(Resource.sf);
 //                 if (this.process == 1) {
+//                     // 隐藏游戏已添加，可从“特
+//                     // 别菜单”进入
 //                     graphics.drawString("\u9690\u85cf\u6e38\u620f\u5df2\u6dfb", n + 5, n13 + 7, 4 | 0x10);
 //                     graphics.drawString("\u52a0\uff0c\u53ef\u4ece\u201c\u7279", n + 5, n13 + 22, 4 | 0x10);
 //                     graphics.drawString("\u522b\u83dc\u5355\u201d\u8fdb\u5165", n + 5, n13 + 37, 4 | 0x10);
 //                 } else {
+//                     // 你已经获得
+//                     // 新的马种。
 //                     graphics.drawString("\u4f60\u5df2\u7ecf\u83b7\u5f97", n + 5, n13 + 7, 4 | 0x10);
 //                     graphics.drawString("\u65b0\u7684\u9a6c\u79cd\u3002", n + 5, n13 + 22, 4 | 0x10);
 //                 }
