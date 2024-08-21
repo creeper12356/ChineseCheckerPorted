@@ -20,7 +20,6 @@ public class RoundMenuScreen extends BasicMenuScreen {
     private Table tableOption;
 
     private Texture[] imgSelDia = new Texture[2]; // 引用Resource的图片，无需dispose
-    private Texture[] imgButton = new Texture[4];
     private Texture imgRound; // "关卡"
     private Texture imgStage; // "第几关"
 
@@ -38,13 +37,10 @@ public class RoundMenuScreen extends BasicMenuScreen {
         rectangleActor = new RectangleActor();
         stage.addActor(rectangleActor);
 
-        this.imgButton[0] = Resource.loadImage("button_move.png");
-        this.imgButton[1] = Resource.loadImage("button_ok.png");
-
         this.imgRound = Resource.loadImage("roundchip_3.png");
 
         this.imgButtonOk = Resource.loadImage("touch/tok.png");
-        this.imgButtonLeft = Resource.loadImage("tl.png");
+        this.imgButtonLeft = Resource.loadImage("touch/tl.png");
         this.imgButtonRight = Resource.loadImage("touch/tr.png");
 
         tableOption = new Table();
@@ -251,10 +247,6 @@ public class RoundMenuScreen extends BasicMenuScreen {
         if (imgStage != null) {
             imgStage.dispose();
         }
-        for (int i = 0; i < 4; ++i) {
-            imgButton[i].dispose();
-        }
-
         imgButtonOk.dispose();
         imgButtonLeft.dispose();
         imgButtonRight.dispose();

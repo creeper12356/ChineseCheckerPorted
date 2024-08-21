@@ -2,6 +2,7 @@ package io.github.creeper12356;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 
 import io.github.creeper12356.screen.BasicMenuScreen;
 import io.github.creeper12356.screen.BoardScreen;
@@ -48,8 +49,9 @@ public class MyGame extends Game {
     public void dispose() {
         Resource.dispose();
 
-        screens[0].dispose();
-        screens[1].dispose();
+        for(Screen screen: screens) {
+            screen.dispose();
+        }
         System.out.println("Game disposed");
         super.dispose();
     }
