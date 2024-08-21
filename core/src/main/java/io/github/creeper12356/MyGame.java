@@ -4,13 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
 import io.github.creeper12356.screen.BasicMenuScreen;
+import io.github.creeper12356.screen.BoardScreen;
 import io.github.creeper12356.screen.MainMenuScreen;
 import io.github.creeper12356.screen.RoundMenuScreen;
 import io.github.creeper12356.screen.StoryMenuScreen;
 import io.github.creeper12356.utils.Resource;
 
 public class MyGame extends Game {
-    private BasicMenuScreen[] screens = new BasicMenuScreen[3];
+    private BasicMenuScreen[] screens = new BasicMenuScreen[4];
     private int lastScreen = -1;
     private int currentScreen = -1;
     /**
@@ -39,6 +40,7 @@ public class MyGame extends Game {
         screens[0] = new MainMenuScreen(this);
         screens[1] = new StoryMenuScreen(this);
         screens[2] = new RoundMenuScreen(this);
+        screens[3] = new BoardScreen(this);
         setScreen(0);
     }
 

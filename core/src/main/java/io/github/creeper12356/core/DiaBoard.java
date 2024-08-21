@@ -3,17 +3,19 @@ package io.github.creeper12356.core;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import com.badlogic.gdx.Gdx;
+
 /**
  * @brief 棋盘类
  */
 public class DiaBoard {
     public static final int BOARD_WID = 19; // 棋盘宽度
-    public static final int BOARD_HGT = 13; // 棋盘高度 
+    public static final int BOARD_HGT = 13; // 棋盘高度
     // 二维数组，[posx][posy]
-    byte[][] isShow = new byte[BOARD_WID][BOARD_HGT]; 
-    
+    byte[][] isShow = new byte[BOARD_WID][BOARD_HGT];
+
     /**
-     * onDia[posx][posy]: 
+     * onDia[posx][posy]:
      * -1: 没有棋子
      * 0,1,2: 普通棋子，玩家编号
      * 10,11,12: king棋子，玩家编号 + 10
@@ -22,21 +24,33 @@ public class DiaBoard {
     byte[][] passed = new byte[BOARD_WID][BOARD_HGT];
     byte[][] evaluation = new byte[BOARD_WID][BOARD_HGT];
 
-    DiaBoard() {
-        this.Init();
-    }
-
-    void Init() {
+    public DiaBoard() {
         byte[] byArray = null;
         // 从default.dat文件中读取棋盘数据，存入byArray数组
-        DataInputStream dataInputStream = new DataInputStream(this.getClass().getResourceAsStream("default.dat"));
+        /**
+         * 使用13 * 19的二维数组存储六角形棋盘数据
+         * 
+         * 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+         * 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0
+         * 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0
+         * 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1
+         * 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0
+         * 0 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 0
+         * 0 0 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 0 0
+         * 0 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 0
+         * 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0
+         * 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1
+         * 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0
+         * 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0
+         * 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+         */
+        DataInputStream dataInputStream = new DataInputStream(Gdx.files.internal("default.dat").read());
         try {
             byArray = new byte[dataInputStream.available()];
             dataInputStream.read(byArray);
             dataInputStream.close();
-        }
-        catch (IOException iOException) {
-            // empty catch block
+        } catch (IOException iOException) {
+            iOException.printStackTrace();
         }
         for (int i = 0; i < BOARD_HGT; ++i) {
             for (int j = 0; j < BOARD_WID; ++j) {
@@ -51,7 +65,7 @@ public class DiaBoard {
     /**
      * @brief 检查棋盘上的位置是否可以走
      * @param playerIndex 玩家编号
-     * @param posx 
+     * @param posx
      * @param posy
      * @return 0: 不能走，1: 可以走，2: 可以跳过(不保证跳到的位置没有棋子)
      */
@@ -77,7 +91,7 @@ public class DiaBoard {
             }
             if (this.onDia[posx][posy] != -1) {
                 // posx, posy位置有棋子
-                if(this.onDia[posx][posy] >= 10 && this.onDia[posx][posy] - 10 != playerIndex) {
+                if (this.onDia[posx][posy] >= 10 && this.onDia[posx][posy] - 10 != playerIndex) {
                     // 该位置的棋子是国王，且不是当前玩家的国王，无法跳过
                     return 0;
                 } else {
@@ -92,7 +106,7 @@ public class DiaBoard {
     }
 
     void setOnDia(int posx, int posy, int dia) {
-        this.onDia[posx][posy] = (byte)dia;
+        this.onDia[posx][posy] = (byte) dia;
     }
 
     /**
@@ -119,10 +133,10 @@ public class DiaBoard {
     }
 
     void setPassed(int posx, int posy, int passed) {
-        this.passed[posx][posy] = (byte)passed;
+        this.passed[posx][posy] = (byte) passed;
     }
 
-    void clearPassed() {
+    public void clearPassed() {
         for (int i = 0; i < BOARD_HGT; ++i) {
             for (int j = 0; j < BOARD_WID; ++j) {
                 this.passed[j][i] = 0;
@@ -133,7 +147,7 @@ public class DiaBoard {
     /**
      * @brief 清空棋盘上的棋子
      */
-    void clearOnDia() {
+    public void clearOnDia() {
         for (int i = 0; i < BOARD_HGT; ++i) {
             for (int j = 0; j < BOARD_WID; ++j) {
                 this.onDia[j][i] = -1;

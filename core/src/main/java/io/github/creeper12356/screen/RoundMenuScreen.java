@@ -44,7 +44,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
         this.imgRound = Resource.loadImage("roundchip_3.png");
 
         this.imgButtonOk = Resource.loadImage("touch/tok.png");
-        this.imgButtonLeft = Resource.loadImage("touch/tl.png");
+        this.imgButtonLeft = Resource.loadImage("tl.png");
         this.imgButtonRight = Resource.loadImage("touch/tr.png");
 
         tableOption = new Table();
@@ -54,7 +54,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
         ImageButton imageButtonOk = getImageButton(imgButtonOk, imgButtonOk, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Ok");
+                myGame.setScreen(3);
             }
         });
         ImageButton imageButtonLeft = getImageButton(imgButtonLeft, imgButtonLeft, new ClickListener() {
@@ -141,7 +141,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
         batch.begin();
 
         batch.draw(imgSelDia[1],
-                Resource.imgPlayer[1].getWidth() + 18,
+                Resource.imgPlayer[1].getWidth() + 20,
                 106);
         batch.draw(Resource.imgEnemy[0],
                 0,
@@ -153,7 +153,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
                 Gdx.graphics.getWidth() - Resource.imgPlayer[0].getWidth(),
                 106);
 
-        // 此处绘制关卡位置和原游戏有出入
+        // TODO: 此处绘制关卡位置和原游戏有出入
         batch.draw(imgRound, Gdx.graphics.getWidth() / 2 - imgRound.getWidth() / 2, 190);
         batch.draw(imgStage, Gdx.graphics.getWidth() / 2 - imgStage.getWidth() / 2, 190 - imgStage.getHeight() - 1);
         batch.end();

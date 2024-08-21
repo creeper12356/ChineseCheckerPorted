@@ -67,7 +67,7 @@ public class Player {
         }
     }
 
-    void init(int type, int homePosition, int diaType, DiaBoard diaBoard) {
+    public void init(int type, int homePosition, int diaType, DiaBoard diaBoard) {
         this.diaBoard = diaBoard;
         this.type = type;
         this.diaType = diaType;
@@ -124,35 +124,35 @@ public class Player {
         this.sortingDia();
     }
 
-    int getDiaRank(int n) {
+    public int getDiaRank(int n) {
         return this.dia[n].rank;
     }
 
-    int getDiaRank() {
+    public int getDiaRank() {
         return this.dia[this.currentSel].rank;
     }
 
-    int getDiaPosX(int n) {
+    public int getDiaPosX(int n) {
         return this.dia[n].posx;
     }
 
-    int getDiaPosY(int n) {
+    public int getDiaPosY(int n) {
         return this.dia[n].posy;
     }
 
-    int getDiaPosX() {
+    public int getDiaPosX() {
         return this.dia[this.currentSel].posx;
     }
 
-    int getDiaPosY() {
+    public int getDiaPosY() {
         return this.dia[this.currentSel].posy;
     }
 
-    int getDiaPixx() {
+    public int getDiaPixx() {
         return this.dia[this.currentSel].pixx / 10;
     }
 
-    int getDiaPixy() {
+    public int getDiaPixy() {
         return this.dia[this.currentSel].pixy / 10;
     }
 
@@ -220,7 +220,7 @@ public class Player {
      * @param n
      * @return
      */
-    int searchDia(int n) {
+    public int searchDia(int n) {
         // Utils.playSound(5, false); // play menu.mid
         if ((n == 1 || n == 2) && this.SearchLeftRight(n) == 1) {
             return -1;
