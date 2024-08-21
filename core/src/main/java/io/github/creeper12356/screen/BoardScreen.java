@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import io.github.creeper12356.MyGame;
@@ -19,7 +18,6 @@ public class BoardScreen extends BasicMenuScreen {
     private SpriteBatch batch;
 
     private Stage stageMove;
-    private Table table;
 
     private Texture imgBoard;
 
@@ -81,8 +79,7 @@ public class BoardScreen extends BasicMenuScreen {
     Texture[] imgDiaKing = new Texture[3];
     Texture[] imgDiaSel = new Texture[3];
     Texture[] imgDiaKingSel = new Texture[3];
-    // 8个方向，对应键位1, 3, 6, 9, 7, 4, 2, 8
-    Texture[] imgMoveButton = new Texture[8];
+    Texture[] imgButton = new Texture[10];
     // Image[] imgDia = new Image[3];
     // Image[] imgDiaKing = new Image[3];
     // Image[] imgDiaSel = new Image[3];
@@ -182,84 +179,109 @@ public class BoardScreen extends BasicMenuScreen {
             this.players[i] = Resource.players[i];
         }
 
-        imgMoveButton[0] = Resource.loadImage("touch/t1.png");
-        imgMoveButton[1] = Resource.loadImage("touch/t3.png");
-        imgMoveButton[2] = Resource.loadImage("touch/t6.png");
-        imgMoveButton[3] = Resource.loadImage("touch/t9.png");
-        imgMoveButton[4] = Resource.loadImage("touch/t7.png");
-        imgMoveButton[5] = Resource.loadImage("touch/t4.png");
-        imgMoveButton[6] = Resource.loadImage("touch/tu.png");
-        imgMoveButton[7] = Resource.loadImage("touch/td.png");
+        imgButton[0] = Resource.loadImage("touch/t1.png");
+        imgButton[1] = Resource.loadImage("touch/t3.png");
+        imgButton[2] = Resource.loadImage("touch/t6.png");
+        imgButton[3] = Resource.loadImage("touch/t9.png");
+        imgButton[4] = Resource.loadImage("touch/t7.png");
+        imgButton[5] = Resource.loadImage("touch/t4.png");
+        imgButton[6] = Resource.loadImage("touch/tu.png");
+        imgButton[7] = Resource.loadImage("touch/td.png");
+        imgButton[8] = Resource.loadImage("touch/tc.png");
+        imgButton[9] = Resource.loadImage("touch/tok.png");
 
         stageMove = new Stage();
-        Table table = new Table();
-        table.setFillParent(true);
-        stageMove.addActor(table);
-        ImageButton imageButton1 = getImageButton(imgMoveButton[0], imgMoveButton[0], new ClickListener() {
+        ImageButton imageButton1 = getImageButton(imgButton[0], imgButton[0], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("1");
+                players[currentPlayer].searchDia(Resource.DIR_LU);
             }
         });
 
-        ImageButton imageButton3 = getImageButton(imgMoveButton[1], imgMoveButton[1], new ClickListener() {
+        ImageButton imageButton3 = getImageButton(imgButton[1], imgButton[1], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("3");
+                players[currentPlayer].searchDia(Resource.DIR_RU);
             }
         });
 
-        ImageButton imageButton6 = getImageButton(imgMoveButton[2], imgMoveButton[2], new ClickListener() {
+        ImageButton imageButton6 = getImageButton(imgButton[2], imgButton[2], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("6");
+                players[currentPlayer].searchDia(Resource.DIR_RIGHT);
             }
         });
 
-        ImageButton imageButton9 = getImageButton(imgMoveButton[3], imgMoveButton[3], new ClickListener() {
+        ImageButton imageButton9 = getImageButton(imgButton[3], imgButton[3], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("9");
+                players[currentPlayer].searchDia(Resource.DIR_RD);
             }
         });
 
-        ImageButton imageButton7 = getImageButton(imgMoveButton[4], imgMoveButton[4], new ClickListener() {
+        ImageButton imageButton7 = getImageButton(imgButton[4], imgButton[4], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("7");
+                players[currentPlayer].searchDia(Resource.DIR_LD);
             }
         });
 
-        ImageButton imageButton4 = getImageButton(imgMoveButton[5], imgMoveButton[5], new ClickListener() {
+        ImageButton imageButton4 = getImageButton(imgButton[5], imgButton[5], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("4");
+                players[currentPlayer].searchDia(Resource.DIR_LEFT);
             }
         });
 
-        ImageButton imageButtonUp = getImageButton(imgMoveButton[6], imgMoveButton[6], new ClickListener() {
+        ImageButton imageButtonUp = getImageButton(imgButton[6], imgButton[6], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("2");
+                players[currentPlayer].searchDia(Resource.DIR_UP);
             }
         });
 
-        ImageButton imageButtonDown = getImageButton(imgMoveButton[7], imgMoveButton[7], new ClickListener() {
+        ImageButton imageButtonDown = getImageButton(imgButton[7], imgButton[7], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("8");
+                players[currentPlayer].searchDia(Resource.DIR_DOWN);
+            }
+        });
+        ImageButton imageButtonCancel = getImageButton(imgButton[8], imgButton[8], new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                myGame.setScreen(0);
             }
         });
 
-        table.add(imageButton1).left().expandX();
-        table.add(imageButton3).expandX();
-        table.add(imageButton6).expandX();
-        table.add(imageButton9).expandX();
-        table.row();
-        table.add(imageButton7).left().expandX();
-        table.add(imageButtonDown).expandX();
-        table.add(imageButton4).expandX();
-        table.add(imageButtonUp).expandX();
+        ImageButton imageButtonOk = getImageButton(imgButton[9], imgButton[9], new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
+        // TODO: magic numbers
+        imageButton1.setPosition(17,81);
+        imageButton3.setPosition(52, 81);
+        imageButton6.setPosition(79, 44);
+        imageButton9.setPosition(45, 8);
+        imageButton7.setPosition(9, 8);
+        imageButton4.setPosition(8, 44);
+        imageButtonUp.setPosition(81, 8);
+        imageButtonDown.setPosition(117, 8);
+        imageButtonCancel.setPosition(141, 44);
+        imageButtonOk.setPosition(43, 44);
+
+        stageMove.addActor(imageButton1);
+        stageMove.addActor(imageButton3);
+        stageMove.addActor(imageButton6);
+        stageMove.addActor(imageButton9);
+        stageMove.addActor(imageButton7);
+        stageMove.addActor(imageButton4);
+        stageMove.addActor(imageButtonUp);
+        stageMove.addActor(imageButtonDown);
+        stageMove.addActor(imageButtonCancel);
+        stageMove.addActor(imageButtonOk);
+
 
         // try {
         // this.imgShadow[0] = Image.createImage((String) "/shadow_0.png");
@@ -670,7 +692,7 @@ public class BoardScreen extends BasicMenuScreen {
         stageMove.dispose();
 
         imgBoard.dispose();
-        Texture[][] textureArrays = { imgDia, imgDiaKing, imgDiaSel, imgDiaKingSel, imgMoveButton };
+        Texture[][] textureArrays = { imgDia, imgDiaKing, imgDiaSel, imgDiaKingSel, imgButton };
         for (Texture[] textures : textureArrays) {
             for (Texture texture : textures) {
                 if (texture != null) {
