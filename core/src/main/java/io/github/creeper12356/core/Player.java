@@ -159,7 +159,7 @@ public class Player {
     /**
      * @brief 根据posy排序棋子(从小到大)
      */
-    void sortingDia() {
+    public void sortingDia() {
         int n;
         for (n = 0; n < 9; ++n) {
             int n2 = n;
@@ -265,7 +265,7 @@ public class Player {
         this.diaBoard.setOnDia(this.dia[diaIndex].posx, this.dia[diaIndex].posy, this.index + this.dia[diaIndex].rank);
     }
 
-    int computeMoveGuide() {
+    public int computeMoveGuide() {
         return this.computeMoveGuide(this.currentSel);
     }
 
@@ -308,11 +308,11 @@ public class Player {
         return n2;
     }
 
-    int getMoveGuide(int n) {
+    public int getMoveGuide(int n) {
         return this.moveGuide[n];
     }
 
-    int[] getMoveGuide() {
+    public int[] getMoveGuide() {
         int[] nArray = new int[6];
         for (int i = 0; i < 6; ++i) {
             nArray[i] = this.moveGuide[i];
@@ -324,7 +324,7 @@ public class Player {
      * @brief 是否可以继续移动
      * @return
      */
-    boolean isMoreMove() {
+    public boolean isMoreMove() {
         if (this.jumpMove > 0) {
             this.computeMoveGuide();
             boolean bl = false;
@@ -343,7 +343,7 @@ public class Player {
      * @param n 移动的方向
      * @return TODO
      */
-    boolean initMovingDia(int n) {
+    public boolean initMovingDia(int n) {
         if (n == -1) {
             return false;
         }
@@ -385,7 +385,7 @@ public class Player {
      * @brief 计算玩家的得分
      * @return 得分，即棋子到达对面家的数量
      */
-    int calcPoint() {
+    public int calcPoint() {
         int n = (this.homePosition + 3) % 6;
         this.point = 0;
         for (int i = 0; i < 10; ++i) {
@@ -402,7 +402,7 @@ public class Player {
     /**
      * @brief 结束回合
      */
-    void endTurn() {
+    public void endTurn() {
         this.charFace = 0;
         if (this.jumpMove > 1) {
             this.accuCombo += this.jumpMove - 1;
