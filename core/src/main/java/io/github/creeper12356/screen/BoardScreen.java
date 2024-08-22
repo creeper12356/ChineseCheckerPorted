@@ -259,7 +259,11 @@ public class BoardScreen extends BasicMenuScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (state == MOVEDIA) {
-                    endTurn();
+                    if(players[currentPlayer].getMoveCnt() == 0) {
+                        state = GAMEREADY;
+                    } else {
+                        endTurn();
+                    }
                 } else {
                     myGame.setScreen(0);
                 }
@@ -1130,12 +1134,12 @@ public class BoardScreen extends BasicMenuScreen {
         if (state == GAMEREADY) {
             players[currentPlayer].searchDia(searchDir);
         } else if (state == MOVEDIA) {
-            players[currentPlayer].initMovingDia(moveDir);
-            if (!players[currentPlayer].isMoreMove()) {
+            if (players[currentPlayer].initMovingDia(moveDir) && !players[currentPlayer].isMoreMove()) {
                 this.endTurn();
             }
         }
     }
+
 
     private void changeNextPlayer() {
         this.players[this.currentPlayer].sortingDia();
