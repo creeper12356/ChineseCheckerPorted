@@ -67,7 +67,7 @@ public class TitleScreen implements Screen {
             Gdx.gl.glClearColor(1, 1, 1, 1); // 设置清屏颜色为白色
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // 清屏
             if (this.process <= 2) {
-                batch.draw(imgMobilebus, 0, Gdx.graphics.getHeight() / 2 - imgMobilebus.getHeight() / 2);
+                batch.draw(imgMobilebus, 0, Resource.halfHeight - imgMobilebus.getHeight() / 2);
             } else if (this.process == 3) {
                 // graphics.setFont(Resource.sf);
                 Resource.drawStringAtCenter("是否开启声音", font, batch);

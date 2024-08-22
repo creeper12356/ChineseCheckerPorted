@@ -21,8 +21,8 @@ public class RectangleActor extends Actor {
         shapeRenderer.setColor(Color.BLACK);
 
         int n = 54; // TODO: 修改这个值以调整矩形的大小
-        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2 - n);
-        shapeRenderer.rect(0, Gdx.graphics.getHeight() / 2 + n, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2 - n);
+        shapeRenderer.rect(0, 0, Resource.totalWidth, Resource.halfHeight - n);
+        shapeRenderer.rect(0, Resource.halfHeight + n, Resource.totalWidth, Resource.halfHeight - n);
 
         shapeRenderer.end();
 

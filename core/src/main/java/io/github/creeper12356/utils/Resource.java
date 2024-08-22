@@ -165,18 +165,18 @@ public class Resource {
     }
 
     public static void drawImageAtCenter(Texture img, SpriteBatch batch) {
-        batch.draw(img, Gdx.graphics.getWidth() / 2 - img.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - img.getHeight() / 2);
+        batch.draw(img, 240 / 2 - img.getWidth() / 2,
+                Resource.halfHeight - img.getHeight() / 2);
     }
 
     public static void drawImageAtBottom(Texture img, SpriteBatch batch) {
-        batch.draw(img, Gdx.graphics.getWidth() / 2 - img.getWidth() / 2, 0);
+        batch.draw(img, 240 / 2 - img.getWidth() / 2, 0);
     }
 
     public static void drawStringAtCenter(String str, BitmapFont font, SpriteBatch batch) {
         final GlyphLayout layout = new GlyphLayout(font, str);
-        final float fontX = Gdx.graphics.getWidth() / 2 - layout.width / 2;
-        final float fontY = Gdx.graphics.getHeight() / 2 + layout.height / 2;
+        final float fontX = Resource.halfWidth - layout.width / 2;
+        final float fontY = Resource.halfHeight + layout.height / 2;
         font.draw(batch, str, fontX, fontY);
     }
 
@@ -189,7 +189,7 @@ public class Resource {
 
     public static void drawStringAtBottomRight(String str, BitmapFont font, SpriteBatch batch) {
         final GlyphLayout layout = new GlyphLayout(font, str);
-        final float fontX = Gdx.graphics.getWidth() - layout.width;
+        final float fontX = 240 - layout.width;
         final float fontY = layout.height;
         font.draw(batch, str, fontX, fontY);
     }
@@ -695,6 +695,10 @@ public class Resource {
 
         HGAB = 11;
         VGAB = 16;
+        totalWidth = 240;
+        totalHeight = 320;
+        halfHeight = 160;
+        halfWidth = 120;
         players = new Player[3];
         for(int i = 0;i < 3;++i) {
             players[i] = new Player(i);

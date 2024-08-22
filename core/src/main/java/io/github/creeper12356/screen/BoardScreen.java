@@ -199,7 +199,7 @@ public class BoardScreen extends BasicMenuScreen {
         imgMoveNum[4] = Resource.loadImage("movenum_7.png");
         imgMoveNum[5] = Resource.loadImage("movenum_4.png");
 
-        stageMove = new Stage();
+        stageMove = new Stage(viewport);
         ImageButton imageButton1 = getImageButton(imgButton[0], imgButton[0], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -432,7 +432,7 @@ public class BoardScreen extends BasicMenuScreen {
         super.render(delta);
         System.out.println("this.state == " + state);
         batch.begin();
-        batch.draw(imgBoard, 0, Gdx.graphics.getHeight() / 2 - imgBoard.getHeight() / 2 - 10);
+        batch.draw(imgBoard, 0, Resource.halfHeight - imgBoard.getHeight() / 2 - 10);
 
         // migrated from paint()
         // int n;
@@ -752,7 +752,7 @@ public class BoardScreen extends BasicMenuScreen {
      * @return
      */
     private int getDiaPixy(int posy) {
-        return Gdx.graphics.getHeight() / 2 + imgBoard.getHeight() / 2 - 10 - 6 - posy * Resource.VGAB;
+        return Resource.halfHeight + imgBoard.getHeight() / 2 - 10 - 6 - posy * Resource.VGAB;
     }
 
     private void drawDias(SpriteBatch batch) {
@@ -911,8 +911,8 @@ public class BoardScreen extends BasicMenuScreen {
 
     void drawAvata(SpriteBatch batch) {
         if (Resource.gameMode == Resource.GAMEMODE_STORY) {
-            batch.draw(Resource.imgPlayer[0], Gdx.graphics.getWidth() - Resource.imgPlayer[0].getWidth(), 0);
-            batch.draw(Resource.imgEnemy[0], 0, Gdx.graphics.getHeight() - Resource.imgEnemy[0].getHeight());
+            batch.draw(Resource.imgPlayer[0], Resource.totalWidth - Resource.imgPlayer[0].getWidth(), 0);
+            batch.draw(Resource.imgEnemy[0], 0, Resource.totalHeight - Resource.imgEnemy[0].getHeight());
             if (this.players[0].getCharFace() != 0) {
                 if (this.players[0].getCharFace() == 1) {
                     // graphics.drawImage(this.imgPlayer[1],

@@ -143,15 +143,15 @@ public class RoundMenuScreen extends BasicMenuScreen {
                 0,
                 106);
         batch.draw(imgSelDia[0],
-                Gdx.graphics.getWidth() - Resource.imgPlayer[0].getWidth() - imgSelDia[0].getWidth(),
+                240 - Resource.imgPlayer[0].getWidth() - imgSelDia[0].getWidth(),
                 106);
         batch.draw(Resource.imgPlayer[0],
-                Gdx.graphics.getWidth() - Resource.imgPlayer[0].getWidth(),
+                240 - Resource.imgPlayer[0].getWidth(),
                 106);
 
         // TODO: 此处绘制关卡位置和原游戏有出入
-        batch.draw(imgRound, Gdx.graphics.getWidth() / 2 - imgRound.getWidth() / 2, 190);
-        batch.draw(imgStage, Gdx.graphics.getWidth() / 2 - imgStage.getWidth() / 2, 190 - imgStage.getHeight() - 1);
+        batch.draw(imgRound, 240 / 2 - imgRound.getWidth() / 2, 190);
+        batch.draw(imgStage, 240 / 2 - imgStage.getWidth() / 2, 190 - imgStage.getHeight() - 1);
         batch.end();
 
         // n10 = Resource.halfWidth - (this.imgRoundChip[0].getWidth() +

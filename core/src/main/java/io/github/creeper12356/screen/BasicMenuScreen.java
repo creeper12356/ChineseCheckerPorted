@@ -1,6 +1,9 @@
 package io.github.creeper12356.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -11,12 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.github.creeper12356.MyGame;
 import io.github.creeper12356.utils.Resource;
 
 public class BasicMenuScreen implements Screen {
     protected MyGame myGame;
+    protected OrthographicCamera camera;
+    protected Viewport viewport;
 
     private Stage stage;
     private Table table;
@@ -28,8 +35,11 @@ public class BasicMenuScreen implements Screen {
     public BasicMenuScreen(MyGame myGame, boolean okVisible, boolean cancelVisible) {
         this.myGame = myGame;
 
-        stage = new Stage();
-        // Gdx.input.setInputProcessor(stage);
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(Resource.totalWidth, Resource.totalHeight);
+        viewport.apply();
+
+        stage = new Stage(viewport);
 
         table = new Table();
         table.setFillParent(true);
@@ -56,12 +66,13 @@ public class BasicMenuScreen implements Screen {
             table.add(imageButtonOk).left().expandX();
         }
         if (cancelVisible) {
-            ImageButton imageButtonCancel = getImageButton(imgTouchButtonCancel, imgTouchButtonCancel, new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    BasicMenuScreen.this.myGame.navigateBack();
-                }
-            });
+            ImageButton imageButtonCancel = getImageButton(imgTouchButtonCancel, imgTouchButtonCancel,
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            BasicMenuScreen.this.myGame.navigateBack();
+                        }
+                    });
             table.add(imageButtonCancel).expandX().right();
         }
 
@@ -80,6 +91,10 @@ public class BasicMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class MainMenuScreen extends BasicMenuScreen {
 
         imgBackgroundMenu = Resource.loadImage("bgmenu.png");
         Image imgMenu = new Image(imgBackgroundMenu);
-        imgMenu.setPosition(0, Gdx.graphics.getHeight(), Align.topLeft);
+        imgMenu.setPosition(0, Resource.totalHeight, Align.topLeft);
         stage.addActor(imgMenu);
 
         table = new Table();

@@ -617,7 +617,7 @@
 //                 n5 = 46;
 //                 n4 = 52;
 //                 n3 = 34;
-//                 Resource.drawPanel(graphics, Resource.halfWidth - 120, Resource.halfHeight - 140, 240, 276);
+//                 Resource.drawPanel(graphics, Resource.halfWidth - 120, Resource.halfHeight - 140, 320, 276);
 //             } else {
 //                 n9 = Resource.halfWidth - 57;
 //                 n8 = Resource.halfHeight - 70;
