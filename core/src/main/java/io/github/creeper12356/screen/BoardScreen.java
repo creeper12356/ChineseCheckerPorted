@@ -36,8 +36,9 @@ public class BoardScreen extends BasicMenuScreen {
     public static final int READYTALK = 12;
     public static final int RETURNVSMENU = 13;
     public static final int GAMEFAILED = 14;
-    public static final int COMMOVEDIA = 15;
-    public static final int HOMEIN = 16;
+    public static final int COMMOVEDIA = 15; // 电脑移动棋子的动画
+    public static final int HOMEIN = 16; // 到达家的动画
+
     public static final int PMSTATE_MAIN = 0;
     public static final int PMSTATE_QUITYESNO = 1;
     public static final int PMSTATE_QUITYESNO2 = 2;
@@ -258,9 +259,7 @@ public class BoardScreen extends BasicMenuScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (state == MOVEDIA) {
-                    state = GAMEREADY;
-                    players[currentPlayer].endTurn();
-                    diaBoard.clearPassed();
+                    endTurn();
                 } else {
                     myGame.setScreen(0);
                 }
@@ -530,18 +529,19 @@ public class BoardScreen extends BasicMenuScreen {
             // this.drawShadow(graphics);
             this.drawDias(batch);
             // if (this.aniDiaFrame >= 4) {
-            // if (this.players[this.currentPlayer].getType() == 2) {
-            // this.players[this.currentPlayer].getComMove(this.players[0]);
-            // this.players[this.currentPlayer].computeMoveGuide();
-            // this.players[this.currentPlayer].initMovingDia(this.players[this.currentPlayer].movingList[0]);
-            // this.state = 3;
-            // this.timeOut = 0;
-            // this.aniDiaFrame = 0;
-            // this.aniDiaMaxFrame = 5;
-            // this.aniDiaSumTime = 0;
-            // this.aniDiaFrameDelay = 200;
-            // this.aniDiaRepeat = false;
-            // }
+            if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_CPU) {
+                this.players[this.currentPlayer].getComMove(this.players[0]);
+                this.players[this.currentPlayer].computeMoveGuide();
+                this.players[this.currentPlayer].initMovingDia(this.players[this.currentPlayer].getMovingList()[0]);
+                this.state = GAMEREADY;
+                this.timeOut = 0;
+                endTurn();
+                // this.aniDiaFrame = 0;
+                // this.aniDiaMaxFrame = 5;
+                // this.aniDiaSumTime = 0;
+                // this.aniDiaFrameDelay = 200;
+                // this.aniDiaRepeat = false;
+            }
             // } else {
             // ++this.aniDiaFrame;
             // }
@@ -1131,10 +1131,8 @@ public class BoardScreen extends BasicMenuScreen {
             players[currentPlayer].searchDia(searchDir);
         } else if (state == MOVEDIA) {
             players[currentPlayer].initMovingDia(moveDir);
-            if(!players[currentPlayer].isMoreMove()) {
-                state = GAMEREADY;
-                players[currentPlayer].endTurn();
-                diaBoard.clearPassed();
+            if (!players[currentPlayer].isMoreMove()) {
+                this.endTurn();
             }
         }
     }
@@ -1162,10 +1160,11 @@ public class BoardScreen extends BasicMenuScreen {
     }
 
     /**
-     * @brief 结束本局游戏
+     * @brief 结束本回合
      */
     void endTurn() {
         if (this.players[this.currentPlayer].calcPoint() == 10) {
+            // 当前玩家已经胜利
             this.players[this.currentPlayer].endTurn();
             if (Resource.gameMode == Resource.GAMEMODE_STORY) {
                 if (this.currentPlayer == 0) {
@@ -1231,36 +1230,40 @@ public class BoardScreen extends BasicMenuScreen {
                 // }
             }
         }
-        if (this.players[this.currentPlayer].getMoveCnt() > 2 && Resource.gameMode == Resource.GAMEMODE_STORY) {
-            this.state = 5;
-            this.showmessageCnt = 0;
-            if (this.currentPlayer == 0) {
-                this.showmessageOrder[0] = 0;
-                this.showmessageOrder[1] = 1;
-                this.players[0].setCharFace(1);
-                this.players[1].setCharFace(2);
-            } else {
-                this.showmessageOrder[0] = 1;
-                this.showmessageOrder[1] = 0;
-                this.players[0].setCharFace(2);
-                this.players[1].setCharFace(1);
-            }
-            if (this.bTimeOutTalk) {
-                this.bTimeOutTalk = false;
-            }
-            // this.strmgr = this.showmessageOrder[this.showmessageCnt] == 1
-            // ? new
-            // StringMgr(strMYCOMBO[this.players[this.showmessageOrder[this.showmessageCnt]].charID],
-            // 14, 1)
-            // : new StringMgr(this.getGameTalk(2, this.players[1].charID), 14, 1);
-            // this.strmgr.start();
-            // this.strmgr.setAutoMode();
-            // Utils.playSound(12, false);
-        } else {
-            this.players[this.currentPlayer].endTurn();
-            this.diaBoard.clearPassed();
-            this.changeNextPlayer();
-        }
+        // 本局仍未结束
+        // TODO: 连击动画
+        // if (this.players[this.currentPlayer].getMoveCnt() > 2 && Resource.gameMode ==
+        // Resource.GAMEMODE_STORY) {
+        // this.state = 5;
+        // this.showmessageCnt = 0;
+        // if (this.currentPlayer == 0) {
+        // this.showmessageOrder[0] = 0;
+        // this.showmessageOrder[1] = 1;
+        // this.players[0].setCharFace(1);
+        // this.players[1].setCharFace(2);
+        // } else {
+        // this.showmessageOrder[0] = 1;
+        // this.showmessageOrder[1] = 0;
+        // this.players[0].setCharFace(2);
+        // this.players[1].setCharFace(1);
+        // }
+        // if (this.bTimeOutTalk) {
+        // this.bTimeOutTalk = false;
+        // }
+        // // this.strmgr = this.showmessageOrder[this.showmessageCnt] == 1
+        // // ? new
+        // //
+        // StringMgr(strMYCOMBO[this.players[this.showmessageOrder[this.showmessageCnt]].charID],
+        // // 14, 1)
+        // // : new StringMgr(this.getGameTalk(2, this.players[1].charID), 14, 1);
+        // // this.strmgr.start();
+        // // this.strmgr.setAutoMode();
+        // // Utils.playSound(12, false);
+        // } else {
+        this.players[this.currentPlayer].endTurn();
+        this.diaBoard.clearPassed();
+        this.changeNextPlayer();
+        // }
     }
 
     @Override

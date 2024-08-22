@@ -451,7 +451,7 @@ public class Player {
      * 
      * @param player
      */
-    void getComMove(Player player) {
+    public void getComMove(Player player) {
         int n;
         int n2;
         int n3 = -99999;
