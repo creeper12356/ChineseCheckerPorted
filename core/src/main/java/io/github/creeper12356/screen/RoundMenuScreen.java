@@ -80,7 +80,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
     public void show() {
         super.show();
         // TODO: 在别处初始化
-        Resource.stageNum = 1;
+        Resource.stageNum = 2;
 
         if (Resource.imgDiaAvt[0] == null) {
             // 首次加载棋子头像

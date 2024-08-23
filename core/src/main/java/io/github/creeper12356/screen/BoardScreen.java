@@ -1,10 +1,13 @@
 package io.github.creeper12356.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -18,6 +21,7 @@ public class BoardScreen extends BasicMenuScreen {
     private SpriteBatch batch;
 
     private Stage stageMove;
+    private Stage stageAni;
 
     private Texture imgBoard;
 
@@ -200,6 +204,7 @@ public class BoardScreen extends BasicMenuScreen {
         imgMoveNum[5] = Resource.loadImage("movenum_4.png");
 
         stageMove = new Stage(viewport);
+        stageAni = new Stage(viewport);
         ImageButton imageButton1 = getImageButton(imgButton[0], imgButton[0], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -259,7 +264,7 @@ public class BoardScreen extends BasicMenuScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (state == MOVEDIA) {
-                    if(players[currentPlayer].getMoveCnt() == 0) {
+                    if (players[currentPlayer].getMoveCnt() == 0) {
                         state = GAMEREADY;
                     } else {
                         endTurn();
@@ -430,7 +435,7 @@ public class BoardScreen extends BasicMenuScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        System.out.println("this.state == " + state);
+        // System.out.println("this.state == " + state);
         batch.begin();
         batch.draw(imgBoard, 0, Resource.halfHeight - imgBoard.getHeight() / 2 - 10);
 
@@ -536,10 +541,50 @@ public class BoardScreen extends BasicMenuScreen {
             if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_CPU) {
                 this.players[this.currentPlayer].getComMove(this.players[0]);
                 this.players[this.currentPlayer].computeMoveGuide();
-                this.players[this.currentPlayer].initMovingDia(this.players[this.currentPlayer].getMovingList()[0]);
-                this.state = GAMEREADY;
+
+                Image imgMovingDia = new Image(
+                        players[currentPlayer].getDiaRank(players[currentPlayer].getCurrentSel()) == 0
+                                ? imgDia[currentPlayer]
+                                : imgDiaKing[currentPlayer]);
+                float initX = getDiaPixx(players[currentPlayer].getDiaPosX()) - imgMovingDia.getWidth() / 2;
+                float initY = getDiaPixy(players[currentPlayer].getDiaPosY());
+
+                imgMovingDia.setPosition(initX, initY);
+                float targetX = initX;
+                float targetY = initY;
+
+                float duration = 1;
+                int movingDir;
+
+                SequenceAction sequence = Actions.sequence();
+
+                // 添加多个移动动画
+                for (int i = 0; i < players[currentPlayer].getMovingListCnt(); ++i) {
+                    movingDir = players[currentPlayer].getMovingList()[i];
+                    players[currentPlayer].computeMoveGuide();
+                    this.players[this.currentPlayer].initMovingDia(movingDir);
+                    targetX += Resource.hInc[movingDir] * players[currentPlayer].getMoveGuide(movingDir)
+                            * Resource.HGAB;
+                    targetY -= Resource.vInc[movingDir] * players[currentPlayer].getMoveGuide(movingDir)
+                            * Resource.VGAB;
+                    sequence.addAction(Actions.moveTo(targetX, targetY, duration));
+                    sequence.addAction(Actions.delay(0.1f));
+                }
+                sequence.addAction(new RunnableAction() {
+                    @Override
+                    public void run() {
+                        stageAni.clear();
+                        timeOut = 0;
+                        endTurn();
+                    }
+                });
+
+                imgMovingDia.addAction(sequence);
+
+                stageAni.addActor(imgMovingDia);
+
+                this.state = MOVINGDIA;
                 this.timeOut = 0;
-                endTurn();
                 // this.aniDiaFrame = 0;
                 // this.aniDiaMaxFrame = 5;
                 // this.aniDiaSumTime = 0;
@@ -555,11 +600,13 @@ public class BoardScreen extends BasicMenuScreen {
             // this.drawShadow(graphics);
             this.drawDias(batch);
             this.drawMoveGuide(batch);
+
         } else if (this.state == MOVINGDIA) {
             // this.drawPoint(graphics);
             this.drawAvata(batch);
             // this.drawShadow(graphics);
             this.drawDias(batch);
+
         } else if (this.state == COMMOVEDIA) {
             // this.drawPoint(graphics);
             this.drawAvata(batch);
@@ -705,6 +752,8 @@ public class BoardScreen extends BasicMenuScreen {
         batch.end();
 
         stageMove.draw();
+        stageAni.act(delta);
+        stageAni.draw();
     }
 
     @Override
@@ -712,6 +761,7 @@ public class BoardScreen extends BasicMenuScreen {
         batch.dispose();
 
         stageMove.dispose();
+        stageAni.dispose();
 
         imgBoard.dispose();
         Texture[][] textureArrays = { imgDia, imgDiaKing, imgDiaSel, imgDiaKingSel, imgButton, imgMoveNum };
@@ -835,6 +885,7 @@ public class BoardScreen extends BasicMenuScreen {
             // if (this.aniDiaFrame == this.aniDiaMaxFrame) {
             // int n;
             // if (this.players[this.currentPlayer].getJumpMove() >= 2) {
+            // // 存在两次及以上的跳跃
             // this.showComboCnt = this.players[this.currentPlayer].getJumpMove() - 1;
             // this.aniComboCnt.init(2, 200, false);
             // if (this.currentPlayer == 0) {
@@ -848,7 +899,7 @@ public class BoardScreen extends BasicMenuScreen {
             // }
             // }
             // }
-            // if (this.players[this.currentPlayer].getType() == 1) {
+            // if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_HUMAN) {
             // if (this.players[this.currentPlayer].isMoreMove()) {
             // this.state = 2;
             // this.aniDiaFrame = 0;
@@ -860,6 +911,7 @@ public class BoardScreen extends BasicMenuScreen {
             // false);
             // } else if (this.players[this.currentPlayer].checkHomeCurDia() &&
             // !this.checkHomeIn) {
+            // // 棋子到家
             // this.state = 16;
             // this.showComboCnt = 99;
             // this.aniComboCnt.init(2, 500, false);
@@ -867,7 +919,8 @@ public class BoardScreen extends BasicMenuScreen {
             // } else {
             // this.endTurn();
             // }
-            // } else if (this.players[this.currentPlayer].getType() == 2) {
+            // } else if (this.players[this.currentPlayer].getType() ==
+            // Player.PLAYERTYPE_CPU) {
             // if (this.players[this.currentPlayer].moveCnt <
             // this.players[this.currentPlayer].movingListCnt) {
             // n = this.players[this.currentPlayer].moveCnt;
@@ -1139,7 +1192,6 @@ public class BoardScreen extends BasicMenuScreen {
             }
         }
     }
-
 
     private void changeNextPlayer() {
         this.players[this.currentPlayer].sortingDia();

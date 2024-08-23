@@ -699,6 +699,7 @@ public class Resource {
         totalHeight = 320;
         halfHeight = 160;
         halfWidth = 120;
+        
         players = new Player[3];
         for(int i = 0;i < 3;++i) {
             players[i] = new Player(i);
