@@ -2,6 +2,8 @@ package io.github.creeper12356.screen;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -435,7 +437,7 @@ public class BoardScreen extends BasicMenuScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        // System.out.println("this.state == " + state);
+        System.out.println("this.state == " + state);
         batch.begin();
         batch.draw(imgBoard, 0, Resource.halfHeight - imgBoard.getHeight() / 2 - 10);
 
@@ -540,35 +542,16 @@ public class BoardScreen extends BasicMenuScreen {
             // if (this.aniDiaFrame >= 4) {
             if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_CPU) {
                 this.players[this.currentPlayer].getComMove(this.players[0]);
-                this.players[this.currentPlayer].computeMoveGuide();
 
-                Image imgMovingDia = new Image(
-                        players[currentPlayer].getDiaRank(players[currentPlayer].getCurrentSel()) == 0
-                                ? imgDia[currentPlayer]
-                                : imgDiaKing[currentPlayer]);
-                float initX = getDiaPixx(players[currentPlayer].getDiaPosX()) - imgMovingDia.getWidth() / 2;
-                float initY = getDiaPixy(players[currentPlayer].getDiaPosY());
-
-                imgMovingDia.setPosition(initX, initY);
-                float targetX = initX;
-                float targetY = initY;
-
-                float duration = 1;
-                int movingDir;
-
+                Image imgMovingDia = getInitMoveDiaActionImage();
                 SequenceAction sequence = Actions.sequence();
-
                 // 添加多个移动动画
                 for (int i = 0; i < players[currentPlayer].getMovingListCnt(); ++i) {
-                    movingDir = players[currentPlayer].getMovingList()[i];
+                    int movingDir = players[currentPlayer].getMovingList()[i];
                     players[currentPlayer].computeMoveGuide();
                     this.players[this.currentPlayer].initMovingDia(movingDir);
-                    targetX += Resource.hInc[movingDir] * players[currentPlayer].getMoveGuide(movingDir)
-                            * Resource.HGAB;
-                    targetY -= Resource.vInc[movingDir] * players[currentPlayer].getMoveGuide(movingDir)
-                            * Resource.VGAB;
-                    sequence.addAction(Actions.moveTo(targetX, targetY, duration));
-                    sequence.addAction(Actions.delay(0.1f));
+                    this.addMoveDiaAction(sequence, movingDir, players[currentPlayer].getMoveGuide(movingDir));
+                    sequence.addAction(Actions.delay(Resource.aniDelayDuration));
                 }
                 sequence.addAction(new RunnableAction() {
                     @Override
@@ -578,11 +561,8 @@ public class BoardScreen extends BasicMenuScreen {
                         endTurn();
                     }
                 });
-
                 imgMovingDia.addAction(sequence);
-
                 stageAni.addActor(imgMovingDia);
-
                 this.state = MOVINGDIA;
                 this.timeOut = 0;
                 // this.aniDiaFrame = 0;
@@ -1183,12 +1163,33 @@ public class BoardScreen extends BasicMenuScreen {
         // this.aniMoveGuide.frameProcess();
     }
 
-    private void handleMoveNumButtonClicked(int moveDir, int searchDir) {
+    private void handleMoveNumButtonClicked(int movingDir, int searchDir) {
         if (state == GAMEREADY) {
             players[currentPlayer].searchDia(searchDir);
         } else if (state == MOVEDIA) {
-            if (players[currentPlayer].initMovingDia(moveDir) && !players[currentPlayer].isMoreMove()) {
-                this.endTurn();
+            int moveStep = players[currentPlayer].getMoveGuide(movingDir);
+            if (moveStep > 0) {
+                Image imgMovingDia = getInitMoveDiaActionImage();
+                SequenceAction sequence = Actions.sequence();
+                this.state = MOVINGDIA;
+                players[currentPlayer].initMovingDia(movingDir);
+                this.addMoveDiaAction(sequence, movingDir, moveStep);
+                sequence.addAction(new RunnableAction() {
+                    @Override
+                    public void run() {
+                        stageAni.clear();
+                        if (players[currentPlayer].isMoreMove()) {
+                            state = MOVEDIA;
+                        } else {
+                            endTurn();
+                        }
+                    }
+                });
+
+                imgMovingDia.addAction(sequence);
+
+                stageAni.addActor(imgMovingDia);
+
             }
         }
     }
@@ -1320,6 +1321,40 @@ public class BoardScreen extends BasicMenuScreen {
         this.diaBoard.clearPassed();
         this.changeNextPlayer();
         // }
+    }
+
+    /**
+     * @brief 获取移动棋子动画的初始图片
+     * @return 图片
+     */
+    private Image getInitMoveDiaActionImage() {
+        Image imgMovingDia = new Image(
+                players[currentPlayer].getDiaRank(players[currentPlayer].getCurrentSel()) == 0
+                        ? imgDia[currentPlayer]
+                        : imgDiaKing[currentPlayer]);
+        float initX = getDiaPixx(players[currentPlayer].getDiaPosX()) - imgMovingDia.getWidth() / 2;
+        float initY = getDiaPixy(players[currentPlayer].getDiaPosY());
+        imgMovingDia.setPosition(initX, initY);
+        return imgMovingDia;
+
+    }
+
+    /**
+     * @brief 添加移动棋子的动作
+     * @param sequence  目标动作序列
+     * @param movingDir 移动方向
+     * @param moveStep  移动步数（1或2）
+     */
+    private void addMoveDiaAction(SequenceAction sequence, int movingDir, int moveStep) {
+        int amountX = Resource.hInc[movingDir] * moveStep
+                * Resource.HGAB;
+        int amountY = -Resource.vInc[movingDir] * moveStep
+                * Resource.VGAB;
+        float jumpHeight = moveStep * 5;
+        Action jumpUp = Actions.moveBy(0, jumpHeight, Resource.aniJumpDuration, Interpolation.pow2Out);
+        Action jumpDown = Actions.moveBy(0, -jumpHeight, Resource.aniJumpDuration, Interpolation.pow2In);
+        Action jump = Actions.sequence(jumpUp, jumpDown);
+        sequence.addAction(Actions.parallel(Actions.moveBy(amountX, amountY, Resource.aniMoveDuration), jump));
     }
 
     @Override

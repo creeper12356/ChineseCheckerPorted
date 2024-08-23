@@ -105,6 +105,10 @@ public class Resource {
     public static Texture[] imgButton;
     public static Random rand;
     public static XTimer aTimer2;
+
+    public static float aniMoveDuration;
+    public static float aniJumpDuration;
+    public static float aniDelayDuration;
     // public static PointMgr pointMgr;
     // public static Animation aniTalkButton;
 
@@ -731,6 +735,10 @@ public class Resource {
         imgPanelEdge = new Texture[4];
         imgButton = new Texture[2];
         rand = new Random(System.currentTimeMillis());
+
+        aniMoveDuration = 0.3f;
+        aniJumpDuration = 0.15f;
+        aniDelayDuration = 0.1f;
         // pointMgr = new PointMgr();
         // aniTalkButton = new Animation();
     }
