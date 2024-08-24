@@ -42,7 +42,7 @@ public class BoardScreen extends BasicMenuScreen {
     public static final int READYTALK = 12;
     public static final int RETURNVSMENU = 13;
     public static final int GAMEFAILED = 14;
-    public static final int COMMOVEDIA = 15; // 电脑移动棋子的动画
+    public static final int COMMOVEDIA = 15; 
     public static final int HOMEIN = 16; // 到达家的动画
 
     public static final int PMSTATE_MAIN = 0;

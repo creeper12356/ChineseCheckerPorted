@@ -1,7 +1,4 @@
 package io.github.creeper12356.utils;
-/*
- * Decompiled with CFR 0.152.
- */
 
 public class XTimer
 implements Runnable {

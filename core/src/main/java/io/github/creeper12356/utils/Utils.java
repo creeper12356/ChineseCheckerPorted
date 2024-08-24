@@ -1,18 +1,7 @@
 package io.github.creeper12356.utils;
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  javax.microedition.lcdui.Display
- *  javax.microedition.media.Manager
- *  javax.microedition.midlet.MIDlet
- */
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-// import javax.microedition.lcdui.Display;
-// import javax.microedition.media.Manager;
-// import javax.microedition.midlet.MIDlet;
 
 public class Utils
  {
