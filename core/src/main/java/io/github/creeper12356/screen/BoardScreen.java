@@ -448,7 +448,7 @@ public class BoardScreen extends BasicMenuScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        System.out.println("this.state == " + state);
+        // System.out.println("this.state == " + state);
         batch.begin();
         batch.draw(imgBoard, 0, Resource.halfHeight - imgBoard.getHeight() / 2 - 10);
 
