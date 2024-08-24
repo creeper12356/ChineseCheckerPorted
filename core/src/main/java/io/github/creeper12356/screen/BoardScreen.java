@@ -1297,7 +1297,7 @@ public class BoardScreen extends BasicMenuScreen {
                     public void run() {
                         myGame.setScreen(MyGame.SCREEN_ROUND_MENU);
                     }
-                }, 2);
+                }, 5);
 
                 return;
             }

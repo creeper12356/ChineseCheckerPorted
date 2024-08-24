@@ -121,18 +121,6 @@ public class Resource {
     public static FreeTypeFontGenerator generator;
     public static FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 
-    public static void checkScreenSize() {
-        if (totalWidth > 118 && totalWidth < 122) {
-            lcdSize = 3;
-        } else if (totalWidth > 174 && totalWidth < 178) {
-            lcdSize = 2;
-        } else if (totalWidth > 238 && totalWidth < 242) {
-            lcdSize = totalHeight > 180 ? 1 : 2;
-        } else if (totalWidth > 319 && totalWidth < 321) {
-            lcdSize = 4;
-        }
-    }
-
     public static boolean isQVGA() {
         return lcdSize == 1 || lcdSize == 4;
     }
@@ -725,7 +713,14 @@ public class Resource {
         gameSpeed = 100;
         soundVolume = 20;
         vibSwitch = 1;
+        
         enableDiaList = new byte[25];
+        for (int i = 0; i < 5; ++i) {
+            enableDiaList[i] = 1;
+        }
+        for (int i = 5; i < 25; ++i) {
+            enableDiaList[i] = 0;
+        }
         // sf = Font.getFont((int) 0, (int) 0, (int) 8);
         homes = new byte[] { 9, 12, 8, 11, 10, 11, 7, 10, 9, 10, 11, 10, 6, 9, 8, 9,
                 10, 9, 12, 9, 0, 9, 1, 8, 2, 9, 2,
@@ -754,6 +749,9 @@ public class Resource {
         aniDelayDuration = 0.1f;
         // pointMgr = new PointMgr();
         // aniTalkButton = new Animation();
+
+        // 启动游戏时加载
+        Resource.loadGame();
     }
 
     public static void dispose() {

@@ -55,16 +55,25 @@ public class RoundMenuScreen extends BasicMenuScreen {
         ImageButton imageButtonLeft = getImageButton(imgButtonLeft, imgButtonLeft, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Resource.players[0].setDiaType((Resource.players[0].getDiaType() + 24) % 25);
-                RoundMenuScreen.this.imgSelDia[0] = Resource.imgDiaAvt[Resource.players[0].getDiaType()];
+                int diaType = Resource.players[0].getDiaType();
+                do {
+                    diaType = (diaType + 24) % 25;
+                } while (Resource.enableDiaList[diaType] == 0 || diaType == Resource.players[1].getDiaType());
+
+                Resource.players[0].setDiaType(diaType);
+                RoundMenuScreen.this.imgSelDia[0] = Resource.imgDiaAvt[diaType];
             }
         });
         ImageButton imageButtonRight = getImageButton(imgButtonRight, imgButtonRight, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: 玩家可选的棋子有限制
-                Resource.players[0].setDiaType((Resource.players[0].getDiaType() + 1) % 25);
-                RoundMenuScreen.this.imgSelDia[0] = Resource.imgDiaAvt[Resource.players[0].getDiaType()];
+                int diaType = Resource.players[0].getDiaType();
+                do {
+                    diaType = (diaType + 1) % 25;
+                } while (Resource.enableDiaList[diaType] == 0 || diaType == Resource.players[1].getDiaType());
+
+                Resource.players[0].setDiaType(diaType);
+                RoundMenuScreen.this.imgSelDia[0] = Resource.imgDiaAvt[diaType];
             }
         });
 
