@@ -2,9 +2,12 @@
 ![alt text](assets/icon.png)
 ### 简介
 《中国跳棋》最初是三星手机上的内置游戏，故事模式共有6关，主人公需要战胜所有人，最后和国王决战，最终实现自己的愿望。
-此游戏在二十年前由韩国的mobilebus公司开发，基于[J2ME平台](https://www.oracle.com/java/technologies/javameoverview.html)（Java 2, Micro Edition），运行在按键手机和部分早期触屏手机上。本项目基于此游戏的旧代码，将它移植到了现代桌面平台，使用libGDX游戏开发框架，支持运行在Windows, MacOS, Linux操作系统，后续可能支持Android和iOS平台。
+
+此游戏在二十年前由韩国的mobilebus公司开发，基于[J2ME平台](https://www.oracle.com/java/technologies/javameoverview.html)（Java 2, Micro Edition，现已过时），运行在按键手机和部分早期触屏手机上。本项目基于此游戏的旧代码，将它移植到了现代桌面平台，使用libGDX游戏开发框架，支持运行在Windows, MacOS, Linux操作系统，后续可能支持Android和iOS平台。
+
 ![alt text](origin_ported.png)
-左为原版（使用[microEmulator](https://github.com/barteo/microemu)运行）,右为移植版本。
+
+左为原版（使用[microemulator](https://github.com/barteo/microemu)运行）,右为移植版本。
 
 
 ### 如何游玩
