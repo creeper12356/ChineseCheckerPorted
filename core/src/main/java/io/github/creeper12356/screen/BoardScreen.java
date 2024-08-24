@@ -252,14 +252,18 @@ public class BoardScreen extends BasicMenuScreen {
         ImageButton imageButtonUp = getImageButton(imgButton[6], imgButton[6], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                players[currentPlayer].searchDia(Resource.DIR_UP);
+                if (state == GAMEREADY) {
+                    players[currentPlayer].searchDia(Resource.DIR_UP);
+                }
             }
         });
 
         ImageButton imageButtonDown = getImageButton(imgButton[7], imgButton[7], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                players[currentPlayer].searchDia(Resource.DIR_DOWN);
+                if (state == GAMEREADY) {
+                    players[currentPlayer].searchDia(Resource.DIR_DOWN);
+                }
             }
         });
         ImageButton imageButtonCancel = getImageButton(imgButton[8], imgButton[8], new ClickListener() {
