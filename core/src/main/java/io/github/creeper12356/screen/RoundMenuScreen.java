@@ -49,7 +49,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
         ImageButton imageButtonOk = getImageButton(imgButtonOk, imgButtonOk, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                myGame.setScreen(3);
+                myGame.setScreen(MyGame.SCREEN_BOARD);
             }
         });
         ImageButton imageButtonLeft = getImageButton(imgButtonLeft, imgButtonLeft, new ClickListener() {
@@ -78,8 +78,6 @@ public class RoundMenuScreen extends BasicMenuScreen {
     @Override
     public void show() {
         super.show();
-        // TODO: 在别处初始化
-        Resource.stageNum = 2;
 
         if (Resource.imgDiaAvt[0] == null) {
             // 首次加载棋子头像

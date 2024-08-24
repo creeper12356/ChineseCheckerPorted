@@ -12,12 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 import io.github.creeper12356.MyGame;
 import io.github.creeper12356.core.DiaBoard;
 import io.github.creeper12356.core.Player;
 import io.github.creeper12356.utils.Resource;
-import io.github.creeper12356.utils.Utils;
 
 public class BoardScreen extends BasicMenuScreen {
     private SpriteBatch batch;
@@ -88,6 +88,9 @@ public class BoardScreen extends BasicMenuScreen {
     Texture[] imgDiaKingSel = new Texture[3];
     Texture[] imgButton = new Texture[10];
     Texture[] imgMoveNum = new Texture[6];
+
+    // 游戏结束的图片，分别为背景、胜利、失败
+    Texture[] imgGameOver = new Texture[3];
     // Image[] imgDia = new Image[3];
     // Image[] imgDiaKing = new Image[3];
     // Image[] imgDiaSel = new Image[3];
@@ -205,6 +208,10 @@ public class BoardScreen extends BasicMenuScreen {
         imgMoveNum[4] = Resource.loadImage("movenum_7.png");
         imgMoveNum[5] = Resource.loadImage("movenum_4.png");
 
+        imgGameOver[0] = Resource.loadImage("uichip_2.png");
+        imgGameOver[1] = Resource.loadImage("uichip_3.png");
+        imgGameOver[2] = Resource.loadImage("uichip_4.png");
+
         stageMove = new Stage(viewport);
         stageAni = new Stage(viewport);
         ImageButton imageButton1 = getImageButton(imgButton[0], imgButton[0], new ClickListener() {
@@ -276,7 +283,7 @@ public class BoardScreen extends BasicMenuScreen {
                         endTurn();
                     }
                 } else {
-                    myGame.setScreen(0);
+                    myGame.setScreen(MyGame.SCREEN_MAIN_MENU);
                 }
             }
         });
@@ -635,7 +642,7 @@ public class BoardScreen extends BasicMenuScreen {
             this.drawAvata(batch);
             // this.drawShadow(graphics);
             this.drawDias(batch);
-            // this.drawGameOver(graphics);
+            this.drawGameOver(batch);
         } else if (this.state == VIEWRESULT) {
             // this.drawPoint(graphics);
             this.drawAvata(batch);
@@ -735,7 +742,9 @@ public class BoardScreen extends BasicMenuScreen {
 
         batch.end();
 
-        stageMove.draw();
+        if (this.state != GAMEOVER) {
+            stageMove.draw();
+        }
         stageAni.act(delta);
         stageAni.draw();
     }
@@ -748,7 +757,8 @@ public class BoardScreen extends BasicMenuScreen {
         stageAni.dispose();
 
         imgBoard.dispose();
-        Texture[][] textureArrays = { imgDia, imgDiaKing, imgDiaSel, imgDiaKingSel, imgButton, imgMoveNum };
+        Texture[][] textureArrays = { imgDia, imgDiaKing, imgDiaSel, imgDiaKingSel, imgButton, imgMoveNum,
+                imgGameOver };
         for (Texture[] textures : textureArrays) {
             for (Texture texture : textures) {
                 if (texture != null) {
@@ -791,9 +801,12 @@ public class BoardScreen extends BasicMenuScreen {
 
     private void drawDias(SpriteBatch batch) {
         for (int i = 0; i < 3; ++i) {
-            if (this.players[i].getType() == Player.PLAYERTYPE_OFF)
+            // 遍历每个玩家
+            if (this.players[i].getType() == Player.PLAYERTYPE_OFF) // 跳过未激活的玩家
                 continue;
+
             for (int j = 0; j < 10; ++j) {
+                // 遍历每个棋子
                 if (j == this.players[i].getCurrentSel() && i == this.currentPlayer)
                     continue;
                 this.drawDia(batch,
@@ -803,129 +816,29 @@ public class BoardScreen extends BasicMenuScreen {
                         getDiaPixy(this.players[i].getDiaPosY(j)),
                         false);
             }
+
             if (i != this.currentPlayer)
                 continue;
-            if (this.state == GAMEREADY) {
+
+            // 绘制当前玩家选中的棋子
+            if (this.state == GAMEREADY || this.state == MOVEDIA) {
                 this.drawDia(batch,
                         i,
                         this.players[i].getCurrentSel(),
                         getDiaPixx(this.players[i].getDiaPosX()),
                         getDiaPixy(this.players[i].getDiaPosY()),
                         true);
-                continue;
-            }
-            if (this.state == SELECTDIA) {
-                boolean bl = false;
-                // if (this.aniDiaFrame == 0) {
-                // bl = true;
-                // } else if (this.aniDiaFrame == 1) {
-                // bl = false;
-                // }
+            } else if (this.state == MOVINGDIA) {
+                // draw nothing
+            } else {
                 this.drawDia(batch,
                         i,
                         this.players[i].getCurrentSel(),
                         getDiaPixx(this.players[i].getDiaPosX()),
                         getDiaPixy(this.players[i].getDiaPosY()),
-                        bl);
-                // this.aniDiaSumTime += 100;
-                // if (this.aniDiaSumTime <= this.aniDiaFrameDelay)
-                // continue;
-                // this.aniDiaSumTime = 0;
-                // ++this.aniDiaFrame;
-                // if (this.aniDiaFrame != this.aniDiaMaxFrame)
-                // continue;
-                // this.aniDiaFrame = 0;
-                continue;
+                        false);
             }
-            if (this.state == MOVINGDIA)
-                continue;
-            this.drawDia(batch,
-                    i,
-                    this.players[i].getCurrentSel(),
-                    getDiaPixx(this.players[i].getDiaPosX()),
-                    getDiaPixy(this.players[i].getDiaPosY()),
-                    true);
-        }
 
-        if (this.state == MOVINGDIA) {
-            // int[] nArray = new int[] { 0, -3, -5, -3, 0 };
-            // if (this.aniDiaFrame == 4) {
-            // graphics.drawImage(this.imgTouchEffect,
-            // Resource.boardZeroPosX + this.players[this.currentPlayer].getDiaPixx(),
-            // Resource.boardZeroPosY + this.players[this.currentPlayer].getDiaPixy() + 2, 1
-            // | 2);
-            // }
-            // this.drawDia(graphics, this.currentPlayer,
-            // this.players[this.currentPlayer].getCurrentSel(),
-            // Resource.boardZeroPosX + this.players[this.currentPlayer].getDiaPixx(),
-            // Resource.boardZeroPosY + this.players[this.currentPlayer].getDiaPixy() +
-            // nArray[this.aniDiaFrame],
-            // false);
-            // this.aniDiaSumTime += 100;
-            // if (this.aniDiaSumTime >= this.aniDiaFrameDelay) {
-            // this.players[this.currentPlayer].movingDia(4);
-            // this.aniDiaSumTime = 0;
-            // ++this.aniDiaFrame;
-            // if (this.aniDiaFrame == this.aniDiaMaxFrame) {
-            // int n;
-            // if (this.players[this.currentPlayer].getJumpMove() >= 2) {
-            // // 存在两次及以上的跳跃
-            // this.showComboCnt = this.players[this.currentPlayer].getJumpMove() - 1;
-            // this.aniComboCnt.init(2, 200, false);
-            // if (this.currentPlayer == 0) {
-            // int n2 = 5;
-            // for (n = 1; n < this.showComboCnt; ++n) {
-            // n2 *= 2;
-            // }
-            // if (Resource.gameMode == Resource.GAMEMODE_STORY) {
-            // Resource.pointMgr.addPoint(n2);
-            // this.stagePoint += n2;
-            // }
-            // }
-            // }
-            // if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_HUMAN) {
-            // if (this.players[this.currentPlayer].isMoreMove()) {
-            // this.state = 2;
-            // this.aniDiaFrame = 0;
-            // this.aniDiaMaxFrame = 2;
-            // this.aniDiaSumTime = 0;
-            // this.aniDiaFrameDelay = 500;
-            // this.aniDiaRepeat = true;
-            // this.aniMoveGuide.init(this.players[this.currentPlayer].possibleDirCnt, 160,
-            // false);
-            // } else if (this.players[this.currentPlayer].checkHomeCurDia() &&
-            // !this.checkHomeIn) {
-            // // 棋子到家
-            // this.state = 16;
-            // this.showComboCnt = 99;
-            // this.aniComboCnt.init(2, 500, false);
-            // Utils.playSound(16, false);
-            // } else {
-            // this.endTurn();
-            // }
-            // } else if (this.players[this.currentPlayer].getType() ==
-            // Player.PLAYERTYPE_CPU) {
-            // if (this.players[this.currentPlayer].moveCnt <
-            // this.players[this.currentPlayer].movingListCnt) {
-            // n = this.players[this.currentPlayer].moveCnt;
-            // this.players[this.currentPlayer].computeMoveGuide();
-            // this.players[this.currentPlayer]
-            // .initMovingDia(this.players[this.currentPlayer].movingList[n]);
-            // if (this.currentPlayer == 1) {
-            // this.state = 3;
-            // }
-            // this.timeOut = 0;
-            // this.aniDiaFrame = 0;
-            // this.aniDiaMaxFrame = 5;
-            // this.aniDiaSumTime = 0;
-            // this.aniDiaFrameDelay = 200;
-            // this.aniDiaRepeat = false;
-            // } else {
-            // this.endTurn();
-            // }
-            // }
-            // }
-            // }
         }
     }
 
@@ -1167,6 +1080,130 @@ public class BoardScreen extends BasicMenuScreen {
         // this.aniMoveGuide.frameProcess();
     }
 
+    void drawGameOver(SpriteBatch batch) {
+        if (Resource.gameMode == Resource.GAMEMODE_STORY) {
+            batch.draw(imgGameOver[0],
+                    Resource.totalWidth - Resource.imgPlayer[0].getWidth() - imgGameOver[0].getWidth(),
+                    0);
+
+            if (this.bWin) {
+                batch.draw(imgGameOver[1],
+                        Resource.totalWidth - Resource.imgPlayer[0].getWidth() - imgGameOver[0].getWidth() / 2
+                                - imgGameOver[1].getWidth() / 2,
+                        imgGameOver[0].getHeight() / 2 - imgGameOver[1].getHeight() / 2);
+            } else {
+                batch.draw(imgGameOver[2],
+                        Resource.totalWidth - Resource.imgPlayer[0].getWidth() - imgGameOver[0].getWidth() / 2
+                                - imgGameOver[2].getWidth() / 2,
+                        imgGameOver[0].getHeight() / 2 - imgGameOver[2].getHeight() / 2);
+            }
+
+            // graphics.drawImage(this.imgUI[3],
+            // Resource.totalWidth - this.imgPlayer[0].getWidth() -
+            // this.imgUI[3].getWidth(),
+            // Resource.totalHeight - this.imgUI[3].getHeight(), 4 | 0x10);
+            // if (this.bWin) {
+            // graphics.drawImage(this.imgUI[4],
+            // Resource.totalWidth - this.imgPlayer[0].getWidth() - this.imgUI[3].getWidth()
+            // / 2
+            // - this.imgUI[4].getWidth() / 2,
+            // Resource.totalHeight - this.imgUI[3].getHeight() / 2 -
+            // this.imgUI[4].getHeight() / 2, 4 | 0x10);
+            // } else {
+            // graphics.drawImage(this.imgUI[5],
+            // Resource.totalWidth - this.imgPlayer[0].getWidth() - this.imgUI[3].getWidth()
+            // / 2
+            // - this.imgUI[5].getWidth() / 2,
+            // Resource.totalHeight - this.imgUI[3].getHeight() / 2 -
+            // this.imgUI[5].getHeight() / 2, 4 | 0x10);
+            // }
+            // this.drawBattleTalk(graphics);
+            // if (this.strmgr.getEndAutoMode()) {
+            // ++this.showmessageCnt;
+            // if (this.showmessageCnt < 2) {
+            // this.strmgr = this.bWin ? new StringMgr(this.getGameTalk(3,
+            // this.players[1].charID), 14, 1)
+            // : new StringMgr(this.getGameTalk(4, this.players[1].charID), 14, 1);
+            // this.strmgr.start();
+            // this.strmgr.setAutoMode();
+            // Utils.playSound(12, false);
+            // } else {
+            // this.players[0].endTurn();
+            // this.players[1].endTurn();
+            // this.players[0].charFace = 0;
+            // this.players[1].charFace = 0;
+            // if (this.bWin) {
+            // this.winCnt[0] = this.winCnt[0] + 1;
+            // } else {
+            // this.winCnt[1] = this.winCnt[1] + 1;
+            // }
+            // this.state = 9;
+            // Utils.playSound(10, false);
+            // this.aniMoveGuide.init(2, 3000, false);
+            // }
+            // }
+        }
+        // } else if (Resource.playerCnt == 2) {
+        // int n = Resource.imgBigNum[this.winList[0]].getWidth() +
+        // this.imgUI[2].getWidth() + 2
+        // + this.imgUI[4].getWidth();
+        // int n2 = Resource.halfWidth - n / 2;
+        // graphics.drawImage(Resource.imgBigNum[this.winList[0]], n2,
+        // Resource.halfHeight - Resource.imgBigNum[this.winList[0]].getHeight(), 4 |
+        // 0x10);
+        // graphics.drawImage(this.imgUI[2], n2 +=
+        // Resource.imgBigNum[this.winList[0]].getWidth() + 1,
+        // Resource.halfHeight - this.imgUI[2].getHeight(), 4 | 0x10);
+        // graphics.drawImage(this.imgUI[4], n2 += this.imgUI[2].getWidth() + 1,
+        // Resource.halfHeight - this.imgUI[4].getHeight() + 1, 4 | 0x10);
+        // if (this.aniFrame.frameProcess() == 0) {
+        // this.players[this.winList[0] - 1].endTurn();
+        // this.state = 9;
+        // Utils.playSound(10, false);
+        // this.aniMoveGuide.init(2, 3000, false);
+        // }
+        // } else if (Resource.playerCnt == 3) {
+        // if (this.winList[1] != -1) {
+        // int n = Resource.imgBigNum[this.winList[1]].getWidth() +
+        // this.imgUI[2].getWidth() + 2
+        // + this.imgUI[4].getWidth();
+        // int n3 = Resource.halfWidth - n / 2;
+        // graphics.drawImage(Resource.imgBigNum[this.winList[1]], n3,
+        // Resource.halfHeight - Resource.imgBigNum[this.winList[1]].getHeight(), 4 |
+        // 0x10);
+        // graphics.drawImage(this.imgUI[2], n3 +=
+        // Resource.imgBigNum[this.winList[1]].getWidth() + 1,
+        // Resource.halfHeight - this.imgUI[2].getHeight(), 4 | 0x10);
+        // graphics.drawImage(this.imgUI[4], n3 += this.imgUI[2].getWidth() + 1,
+        // Resource.halfHeight - this.imgUI[4].getHeight() + 1, 4 | 0x10);
+        // if (this.aniFrame.frameProcess() == 0) {
+        // this.players[this.winList[1] - 1].endTurn();
+        // this.state = 9;
+        // Utils.playSound(10, false);
+        // this.aniMoveGuide.init(2, 3000, false);
+        // }
+        // } else {
+        // int n = Resource.imgBigNum[this.winList[0]].getWidth() +
+        // this.imgUI[2].getWidth() + 2
+        // + this.imgUI[4].getWidth();
+        // int n4 = Resource.halfWidth - n / 2;
+        // graphics.drawImage(Resource.imgBigNum[this.winList[0]], n4,
+        // Resource.halfHeight - Resource.imgBigNum[this.winList[0]].getHeight(), 4 |
+        // 0x10);
+        // graphics.drawImage(this.imgUI[2], n4 +=
+        // Resource.imgBigNum[this.winList[0]].getWidth() + 1,
+        // Resource.halfHeight - this.imgUI[2].getHeight(), 4 | 0x10);
+        // graphics.drawImage(this.imgUI[4], n4 += this.imgUI[2].getWidth() + 1,
+        // Resource.halfHeight - this.imgUI[4].getHeight() + 1, 4 | 0x10);
+        // if (this.aniFrame.frameProcess() == 0) {
+        // this.players[this.currentPlayer].endTurn();
+        // this.diaBoard.clearPassed();
+        // this.changeNextPlayer();
+        // }
+        // }
+        // }
+    }
+
     private void handleMoveNumButtonClicked(int movingDir, int searchDir) {
         if (state == GAMEREADY) {
             players[currentPlayer].searchDia(searchDir);
@@ -1248,8 +1285,20 @@ public class BoardScreen extends BasicMenuScreen {
                 this.showmessageCnt = 0;
                 // this.strmgr.start();
                 // this.strmgr.setAutoMode();
-                Utils.playSound(12, false);
-                this.state = 8;
+                // Utils.playSound(12, false);
+                this.state = GAMEOVER;
+
+                if (bWin && Resource.stageNum < 6) {
+                    ++Resource.stageNum;
+                    Resource.saveGame();
+                }
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        myGame.setScreen(MyGame.SCREEN_ROUND_MENU);
+                    }
+                }, 2);
+
                 return;
             }
             if (Resource.gameMode == Resource.GAMEMODE_VS) {

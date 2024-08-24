@@ -46,7 +46,7 @@ public class MainMenuScreen extends BasicMenuScreen {
         addImageButton(imgMenuTextUp[0], imgMenuTextDown[0], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MainMenuScreen.this.myGame.setScreen(1);
+                MainMenuScreen.this.myGame.setScreen(MyGame.SCREEN_STORY_MENU);
             }
         });
 

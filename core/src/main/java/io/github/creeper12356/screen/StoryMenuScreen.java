@@ -35,14 +35,18 @@ public class StoryMenuScreen extends BasicMenuScreen {
         addImageButton(imgTextNew, imgTextNew, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("New");
+                Resource.newGame();
+                Resource.stageNum = 1;
+                Resource.saveGame();
+                StoryMenuScreen.this.myGame.setScreen(MyGame.SCREEN_ROUND_MENU);
             }
         });
 
         addImageButton(imgTextContinue, imgTextContinue, new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StoryMenuScreen.this.myGame.setScreen(2);
+                Resource.loadGame();
+                StoryMenuScreen.this.myGame.setScreen(MyGame.SCREEN_ROUND_MENU);
             }
         });
 

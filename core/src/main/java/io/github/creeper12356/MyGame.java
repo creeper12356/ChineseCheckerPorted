@@ -12,6 +12,11 @@ import io.github.creeper12356.screen.StoryMenuScreen;
 import io.github.creeper12356.utils.Resource;
 
 public class MyGame extends Game {
+    public static final int SCREEN_MAIN_MENU = 0;
+    public static final int SCREEN_STORY_MENU = 1;
+    public static final int SCREEN_ROUND_MENU = 2;
+    public static final int SCREEN_BOARD = 3;
+
     private BasicMenuScreen[] screens = new BasicMenuScreen[4];
     private int lastScreen = -1;
     private int currentScreen = -1;
@@ -42,7 +47,7 @@ public class MyGame extends Game {
         screens[1] = new StoryMenuScreen(this);
         screens[2] = new RoundMenuScreen(this);
         screens[3] = new BoardScreen(this);
-        setScreen(0);
+        setScreen(SCREEN_MAIN_MENU);
     }
 
     @Override

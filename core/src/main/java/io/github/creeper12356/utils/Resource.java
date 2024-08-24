@@ -1,6 +1,12 @@
 package io.github.creeper12356.utils;
 
 import java.util.Random;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 // import javax.microedition.lcdui.Font;
 // import javax.microedition.lcdui.Graphics;
 // import javax.microedition.lcdui.Image;
@@ -109,7 +115,7 @@ public class Resource {
     public static float aniMoveDuration;
     public static float aniJumpDuration;
     public static float aniDelayDuration;
-    // public static PointMgr pointMgr;
+    public static int pointMgr;
     // public static Animation aniTalkButton;
 
     public static FreeTypeFontGenerator generator;
@@ -155,7 +161,7 @@ public class Resource {
      * @return
      */
     public static Texture replaceTexture(Texture oldTexture, String filename) {
-        if(oldTexture != null) {
+        if (oldTexture != null) {
             oldTexture.dispose();
         }
         return loadImage(filename);
@@ -486,45 +492,72 @@ public class Resource {
     // return stringArray;
     // }
 
-    // public static void newGame() {
-    // stageNum = 0;
-    // pointMgr.setPoint(0);
-    // accuMove = 0;
-    // accuCombo = 0;
-    // Resource.stageClear[0] = 0;
-    // Resource.stageClear[1] = 0;
-    // Resource.stageClear[2] = 0;
-    // Resource.stageClear[3] = 0;
-    // Resource.stageClear[4] = 0;
-    // Resource.stageClear[5] = 0;
-    // }
+    public static void newGame() {
+        stageNum = 0;
+        pointMgr = 0;
+        accuMove = 0;
+        accuCombo = 0;
+        Resource.stageClear[0] = 0;
+        Resource.stageClear[1] = 0;
+        Resource.stageClear[2] = 0;
+        Resource.stageClear[3] = 0;
+        Resource.stageClear[4] = 0;
+        Resource.stageClear[5] = 0;
+    }
 
-    // public static void saveGame() {
-    // ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    // DataOutputStream dataOutputStream = new
-    // DataOutputStream(byteArrayOutputStream);
-    // try {
-    // int n;
-    // dataOutputStream.writeInt(stageNum);
-    // dataOutputStream.writeInt(pointMgr.getPoint());
-    // for (n = 0; n < 6; ++n) {
-    // dataOutputStream.writeByte(stageClear[n]);
-    // }
-    // for (n = 0; n < 25; ++n) {
-    // dataOutputStream.writeByte(enableDiaList[n]);
-    // }
-    // dataOutputStream.writeBoolean(bOpenSpecialGame);
-    // dataOutputStream.writeBoolean(Continental.newGame);
-    // dataOutputStream.writeBoolean(MiniGameView.bNewGame1);
-    // dataOutputStream.writeBoolean(MiniGameView.bNewGame2);
-    // Resource.saveRms("game", byteArrayOutputStream.toByteArray(), 1);
-    // dataOutputStream.close();
-    // byteArrayOutputStream = null;
-    // dataOutputStream = null;
-    // } catch (IOException iOException) {
-    // iOException.printStackTrace();
-    // }
-    // }
+    public static void saveGame() {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        try {
+            dataOutputStream.writeInt(stageNum);
+            dataOutputStream.writeInt(pointMgr);
+            for (int i = 0; i < 6; ++i) {
+                dataOutputStream.writeByte(stageClear[i]);
+            }
+            for (int i = 0; i < 25; ++i) {
+                dataOutputStream.writeByte(enableDiaList[i]);
+            }
+            // dataOutputStream.writeBoolean(bOpenSpecialGame);
+            // dataOutputStream.writeBoolean(Continental.newGame);
+            // dataOutputStream.writeBoolean(MiniGameView.bNewGame1);
+            // dataOutputStream.writeBoolean(MiniGameView.bNewGame2);
+            Resource.saveData(System.getProperty("user.home") + "/.chinese.checker.dat",
+                    byteArrayOutputStream.toByteArray());
+            dataOutputStream.close();
+        } catch (IOException iOException) {
+            iOException.printStackTrace();
+        }
+    }
+
+    public static void loadGame() {
+        try {
+            byte[] byArray = Resource.loadData(System.getProperty("user.home") + "/.chinese.checker.dat");
+            if (byArray == null) {
+                Resource.newGame();
+                Resource.saveGame();
+                return;
+            }
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byArray);
+            DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
+            stageNum = dataInputStream.readInt();
+            pointMgr = dataInputStream.readInt();
+            for (int i = 0; i < 6; ++i) {
+                Resource.stageClear[i] = dataInputStream.readByte();
+            }
+            for (int i = 0; i < 25; ++i) {
+                Resource.enableDiaList[i] = dataInputStream.readByte();
+            }
+            // bOpenSpecialGame = dataInputStream.readBoolean();
+            // Continental.newGame = dataInputStream.readBoolean();
+            // MiniGameView.bNewGame1 = dataInputStream.readBoolean();
+            // MiniGameView.bNewGame2 = dataInputStream.readBoolean();
+            dataInputStream.close();
+        } catch (IOException iOException) {
+            iOException.printStackTrace();
+            Resource.newGame();
+            Resource.saveGame();
+        }
+    }
 
     // public static void saveRms(String string, byte[] byArray, int n) {
     // try {
@@ -544,6 +577,23 @@ public class Resource {
     // }
     // }
 
+    public static void saveData(String filename, byte[] data) {
+        try (FileOutputStream fos = new FileOutputStream(filename)) {
+            fos.write(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static byte[] loadData(String filename) {
+        try {
+            return Gdx.files.internal(filename).readBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // public static byte[] loadRms(String string, int n) {
     // byte[] byArray = null;
     // try {
@@ -559,42 +609,6 @@ public class Resource {
     // return null;
     // }
     // return byArray;
-    // }
-
-    // public static void loadGame() {
-    // try {
-    // byte[] byArray = Resource.loadRms("game", 1);
-    // if (byArray == null) {
-    // Resource.newGame();
-    // Resource.saveGame();
-    // return;
-    // }
-    // ByteArrayInputStream byteArrayInputStream = new
-    // ByteArrayInputStream(byArray);
-    // DataInputStream dataInputStream = new DataInputStream(byteArrayInputStream);
-    // stageNum = dataInputStream.readInt();
-    // int n = dataInputStream.readInt();
-    // pointMgr.setPoint(n);
-    // for (n = 0; n < 6; ++n) {
-    // Resource.stageClear[n] = dataInputStream.readByte();
-    // }
-    // for (n = 0; n < 25; ++n) {
-    // Resource.enableDiaList[n] = dataInputStream.readByte();
-    // }
-    // bOpenSpecialGame = dataInputStream.readBoolean();
-    // Continental.newGame = dataInputStream.readBoolean();
-    // MiniGameView.bNewGame1 = dataInputStream.readBoolean();
-    // MiniGameView.bNewGame2 = dataInputStream.readBoolean();
-    // dataInputStream.close();
-    // byteArrayInputStream.close();
-    // byteArrayInputStream = null;
-    // dataInputStream = null;
-    // byArray = null;
-    // } catch (IOException iOException) {
-    // iOException.printStackTrace();
-    // Resource.newGame();
-    // Resource.saveGame();
-    // }
     // }
 
     // public static void saveConfig() {
@@ -696,16 +710,15 @@ public class Resource {
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.characters = "是否开启声音否故事模式对战模式游戏设置帮助特别菜单排行榜退出";
 
-
         HGAB = 11;
         VGAB = 16;
         totalWidth = 240;
         totalHeight = 320;
         halfHeight = 160;
         halfWidth = 120;
-        
+
         players = new Player[3];
-        for(int i = 0;i < 3;++i) {
+        for (int i = 0; i < 3; ++i) {
             players[i] = new Player(i);
         }
         stageClear = new byte[6];
@@ -758,12 +771,13 @@ public class Resource {
     }
 
     private static void disposeImage(Texture img) {
-        if(img != null) {
+        if (img != null) {
             img.dispose();
         }
     }
+
     private static void disposeImageArray(Texture[] imgArray) {
-        for(Texture img : imgArray) {
+        for (Texture img : imgArray) {
             disposeImage(img);
         }
     }
