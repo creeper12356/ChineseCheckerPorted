@@ -46,8 +46,8 @@ public class BasicMenuScreen implements Screen {
 
         // 加载图片
         imgBackground = Resource.loadImage("background.png");
-        imgTouchButtonCancel = Resource.loadImage("touch/tc.png");
-        imgTouchButtonOk = Resource.loadImage("touch/tok.png");
+        imgTouchButtonCancel = Resource.loadImage(Resource.language + "/touch/tc.png");
+        imgTouchButtonOk = Resource.loadImage(Resource.language + "/touch/tok.png");
 
         // 添加背景图片
         Image img = new Image(imgBackground);

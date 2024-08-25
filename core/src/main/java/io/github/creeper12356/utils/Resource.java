@@ -98,6 +98,8 @@ public class Resource {
     public static final int KEY_NUM9 = 57;
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
+
+
     public static Texture imgBackBuffer;
 
     public static Texture[] imgDiaAvt; // 棋子头像图片
@@ -115,6 +117,9 @@ public class Resource {
     public static float aniJumpDuration;
     public static float aniDelayDuration;
     public static int pointMgr;
+
+
+    public static String language;
     // public static Animation aniTalkButton;
 
     public static FreeTypeFontGenerator generator;
@@ -748,6 +753,8 @@ public class Resource {
         aniDelayDuration = 0.1f;
         // pointMgr = new PointMgr();
         // aniTalkButton = new Animation();
+
+        language = "en";
 
         // 启动游戏时加载
         Resource.loadGame();

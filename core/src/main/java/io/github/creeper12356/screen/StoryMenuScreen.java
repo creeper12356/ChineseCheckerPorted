@@ -29,8 +29,8 @@ public class StoryMenuScreen extends BasicMenuScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        imgTextNew = Resource.loadImage("menutext_31.png");
-        imgTextContinue = Resource.loadImage("menutext_32.png");
+        imgTextNew = Resource.loadImage(Resource.language + "/menutext_31.png");
+        imgTextContinue = Resource.loadImage(Resource.language + "/menutext_32.png");
 
         addImageButton(imgTextNew, imgTextNew, new ClickListener() {
             @Override

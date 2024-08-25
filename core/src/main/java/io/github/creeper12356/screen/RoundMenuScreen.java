@@ -38,7 +38,7 @@ public class RoundMenuScreen extends BasicMenuScreen {
 
         this.imgRound = Resource.loadImage("roundchip_3.png");
 
-        this.imgButtonOk = Resource.loadImage("touch/tok.png");
+        this.imgButtonOk = Resource.loadImage(Resource.language + "/touch/tok.png");
         this.imgButtonLeft = Resource.loadImage("touch/tl.png");
         this.imgButtonRight = Resource.loadImage("touch/tr.png");
 

@@ -198,8 +198,8 @@ public class BoardScreen extends BasicMenuScreen {
         imgButton[5] = Resource.loadImage("touch/t4.png");
         imgButton[6] = Resource.loadImage("touch/tu.png");
         imgButton[7] = Resource.loadImage("touch/td.png");
-        imgButton[8] = Resource.loadImage("touch/tc.png");
-        imgButton[9] = Resource.loadImage("touch/tok.png");
+        imgButton[8] = Resource.loadImage(Resource.language + "/touch/tc.png");
+        imgButton[9] = Resource.loadImage(Resource.language + "/touch/tok.png");
 
         imgMoveNum[0] = Resource.loadImage("movenum_1.png");
         imgMoveNum[1] = Resource.loadImage("movenum_3.png");

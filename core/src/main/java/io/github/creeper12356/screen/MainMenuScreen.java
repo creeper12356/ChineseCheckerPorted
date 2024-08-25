@@ -39,8 +39,8 @@ public class MainMenuScreen extends BasicMenuScreen {
         stage.addActor(table);
 
         for (int i = 0; i < 7; ++i) {
-            imgMenuTextUp[i] = Resource.loadImage("menutext_1" + i + ".png");
-            imgMenuTextDown[i] = Resource.loadImage("menutext_2" + i + ".png");
+            imgMenuTextUp[i] = Resource.loadImage(Resource.language + "/menutext_1" + i + ".png");
+            imgMenuTextDown[i] = Resource.loadImage(Resource.language + "/menutext_2" + i + ".png");
         }
 
         addImageButton(imgMenuTextUp[0], imgMenuTextDown[0], new ClickListener() {
