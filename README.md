@@ -32,5 +32,3 @@ java -jar ./ChineseCheckerPorted-1.0.0.jar
 - 反编译工具： [CFR](https://github.com/leibnitz27/cfr)
 - 代码理解助手： [Github Copilot](https://github.com/features/copilot)
 - J2ME模拟器： [microemulator](https://github.com/barteo/microemu)
-
-test
