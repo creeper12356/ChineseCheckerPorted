@@ -1,8 +1,8 @@
 package io.github.creeper12356.lwjgl3;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+
 import io.github.creeper12356.MyGame;
 
 /** Launches the desktop (LWJGL3) application. */

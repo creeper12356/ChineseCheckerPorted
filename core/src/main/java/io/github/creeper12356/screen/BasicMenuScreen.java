@@ -36,8 +36,7 @@ public class BasicMenuScreen implements Screen {
         this.myGame = myGame;
 
         camera = new OrthographicCamera();
-        viewport = new FitViewport(Resource.totalWidth, Resource.totalHeight);
-        viewport.apply();
+        viewport = new FitViewport(Resource.totalWidth, Resource.totalHeight, camera);
 
         stage = new Stage(viewport);
 
@@ -85,16 +84,15 @@ public class BasicMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
-
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        viewport.update(width, height, true);
     }
 
     @Override

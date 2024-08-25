@@ -754,7 +754,7 @@ public class Resource {
         // pointMgr = new PointMgr();
         // aniTalkButton = new Animation();
 
-        language = "en";
+        language = "zh";
 
         // 启动游戏时加载
         Resource.loadGame();
