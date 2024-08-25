@@ -1,11 +1,8 @@
 package io.github.creeper12356.utils;
 
-import java.util.Random;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 // import javax.microedition.lcdui.Font;
 // import javax.microedition.lcdui.Graphics;
@@ -13,6 +10,9 @@ import java.io.DataOutputStream;
 // import javax.microedition.rms.InvalidRecordIDException;
 // import javax.microedition.rms.RecordStore;
 // import javax.microedition.rms.RecordStoreException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -110,7 +110,6 @@ public class Resource {
     public static Texture[] imgPanelEdge;
     public static Texture[] imgButton;
     public static Random rand;
-    public static XTimer aTimer2;
 
     public static float aniMoveDuration;
     public static float aniJumpDuration;

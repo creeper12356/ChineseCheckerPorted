@@ -25,8 +25,8 @@ public class Player {
     int point; // TODO
     int currentSel; // 当前选中的棋子编号
     int diaType; // 棋子类型
-    int charID; // TODO
-    int charFace; // TODO
+    int charID; 
+    int charFace; 
     int rank; // TODO
     int moveSound; // 棋子移动的音效
     int[] moveGuide = new int[6];
@@ -182,7 +182,7 @@ public class Player {
      * @param n 1表示向左搜索，2表示向右搜索
      * @return 1表示搜索到了更近的棋子, 0表示没有搜索到
      */
-    int SearchLeftRight(int n) {
+    private int SearchLeftRight(int n) {
         int n2 = this.dia[this.currentSel].posx * Resource.HGAB;
         int n3 = this.dia[this.currentSel].posy * Resource.VGAB;
         int minIndex = -1;
@@ -255,7 +255,7 @@ public class Player {
         return 0;
     }
 
-    void moveDia(int diaIndex, int dx, int dy) {
+    private void moveDia(int diaIndex, int dx, int dy) {
         this.diaBoard.setOnDia(this.dia[diaIndex].posx, this.dia[diaIndex].posy, -1);
         this.diaBoard.setPassed(this.dia[diaIndex].posx, this.dia[diaIndex].posy, 1);
 
@@ -274,7 +274,7 @@ public class Player {
      * @param diaIndex 棋子编号
      * @return 可以移动的方向数
      */
-    int computeMoveGuide(int diaIndex) {
+    private int computeMoveGuide(int diaIndex) {
         byte curPosx = this.dia[diaIndex].posx;
         byte curPosy = this.dia[diaIndex].posy;
         if (this.moveCnt > 0 && this.jumpMove == 0) {
@@ -368,7 +368,7 @@ public class Player {
         return true;
     }
 
-    void movingDia(int n) {
+    private void movingDia(int n) {
         int n2 = 0;
         int n3 = 0;
         n2 = Resource.hInc[this.movingDirection] * (Resource.HGAB * 10 / n);
@@ -415,10 +415,7 @@ public class Player {
         this.moveCnt = 0;
     }
 
-    /**
-     * TODO
-     */
-    void getTargetHome() {
+    private void getTargetHome() {
         int n = 9999;
         int n2 = (this.homePosition + 3) % 6; // 对角编号
         this.targetH = Resource.homes[n2 * 20 + 0];
@@ -521,12 +518,10 @@ public class Player {
     }
 
     /**
-     * TODO
-     * 
      * @param n
      * @return
      */
-    int moveBest(int n) {
+    private int moveBest(int n) {
         int[] nArray = new int[20];
         this.getTargetHome();
         this.currentSel = n;
@@ -551,11 +546,9 @@ public class Player {
     }
 
     /**
-     * TODO
-     * 
      * @param n
      */
-    void unmoveBest(int n) {
+    private void unmoveBest(int n) {
         this.currentSel = n;
         while (this.unmoveDiaDir() > 0) {
         }
@@ -567,7 +560,7 @@ public class Player {
      * @brief 获取AI的搜索深度
      * @return
      */
-    int getDepth() {
+    private int getDepth() {
         if (this.aiLevel == 1) {
             return 1;
         }
@@ -595,7 +588,7 @@ public class Player {
      * @param depth  当前搜索深度
      * @return
      */
-    Evaluation getBestEval(int[] nArray, int depth) {
+    private Evaluation getBestEval(int[] nArray, int depth) {
         Evaluation evaluation = new Evaluation();
         int[] nArray2 = new int[19 - depth];
         boolean findBetterEval = false;
@@ -637,7 +630,7 @@ public class Player {
      *          这个函数可能被用于AI决策，以确定哪个移动会使棋子更接近目标位置，或者用于评估游戏的状态，以确定玩家的进度。
      * @return
      */
-    int getEvaluation() {
+    private int getEvaluation() {
         int n = 0;
         if (this.calcPoint() >= 9) {
             n = Resource.Fast_Distance(
@@ -653,7 +646,7 @@ public class Player {
         return n;
     }
 
-    boolean checkHome(DiaPiece diaPiece) {
+    private boolean checkHome(DiaPiece diaPiece) {
         int n = (this.homePosition + 3) % 6;
         for (int i = 0; i < 10; ++i) {
             if (diaPiece.posx != Resource.homes[n * 20 + i * 2 + 0] ||
@@ -664,11 +657,11 @@ public class Player {
         return false;
     }
 
-    boolean checkHomeCurDia() {
+    private boolean checkHomeCurDia() {
         return this.checkHome(this.dia[this.currentSel]);
     }
 
-    boolean checkHome() {
+    private boolean checkHome() {
         int n = 0;
         int n2 = (this.homePosition + 3) % 6;
         for (int i = 0; i < 3; ++i) {
@@ -687,7 +680,7 @@ public class Player {
      * @param diaPiece 棋子
      * @return
      */
-    int getNeighbor(DiaPiece diaPiece) {
+    private int getNeighbor(DiaPiece diaPiece) {
         int n = 0;
         for (int i = 0; i < 6; ++i) {
             byte dia = this.diaBoard.getOnDia(diaPiece.posx + Resource.hInc[i], diaPiece.posy + Resource.vInc[i]);
@@ -703,7 +696,7 @@ public class Player {
      * @brief 撤销上一步移动
      * @return
      */
-    int unmoveDiaDir() {
+    private int unmoveDiaDir() {
         if (this.oldMoveCnt == 0) {
             // 没有上一步移动
             return 0;
@@ -730,7 +723,7 @@ public class Player {
         return this.oldMoveCnt;
     }
 
-    void moveDiaDir(int n, int n2) {
+    private void moveDiaDir(int n, int n2) {
         this.moveDiaDir(this.currentSel, n, n2);
     }
 
@@ -740,7 +733,7 @@ public class Player {
      * @param dir      移动的方向
      * @param dis      移动的距离（1或2）
      */
-    void moveDiaDir(int diaIndex, int dir, int dis) {
+    private void moveDiaDir(int diaIndex, int dir, int dis) {
         int dx = 0;
         int dy = 0;
         dx = Resource.hInc[dir];

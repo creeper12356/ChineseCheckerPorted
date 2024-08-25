@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import io.github.creeper12356.Animation;
 import io.github.creeper12356.utils.Resource;
 
 public class TitleScreen implements Screen {
@@ -25,7 +24,6 @@ public class TitleScreen implements Screen {
     int state = TITLE;
     int process = 1;
     long time;
-    Animation aniJumpAvata;
 
     public TitleScreen() {
         batch = new SpriteBatch();
@@ -35,8 +33,6 @@ public class TitleScreen implements Screen {
         imgTitleChip[1] = Resource.loadImage("titlechip_1.png");
         imgCharBig = Resource.loadImage("charbig.png");
         imgBackground = Resource.loadImage("background.png");
-        this.aniJumpAvata = new Animation();
-        this.aniJumpAvata.init(4, 200, true);
         font = Resource.generator.generateFont(Resource.parameter);
     }
 
@@ -83,11 +79,7 @@ public class TitleScreen implements Screen {
             batch.begin();
             batch.draw(imgBackground, 0, 0);
             Resource.drawImageAtCenter(imgTitleChip[1], batch);
-            
-            if (this.aniJumpAvata.getFrame() != 0) {
-                Resource.drawImageAtBottom(imgTitleChip[0], batch);
-            }
-            this.aniJumpAvata.frameProcess();
+
             batch.end();
         }
     }

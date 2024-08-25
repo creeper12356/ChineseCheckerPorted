@@ -42,9 +42,6 @@ public class Utils
     static boolean repeat;
     public static boolean checkPlaySound;
     static Utils aUtils;
-    // static MMFPlayer mmfp;
-    // static MMFPlayer[] midPlayers;
-    public static XTimer sndTimer;
     static ByteArrayInputStream[] soundis;
 
     public static int RGB(int n, int n2, int n3) {
