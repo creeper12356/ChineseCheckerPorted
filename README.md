@@ -11,9 +11,9 @@
 
 
 ### 如何游玩
-运行此游戏需要Java17及以上版本，在[这里](https://github.com/creeper12356/ChineseCheckerPorted/releases/download/v1.0.0/ChineseCheckerPorted-1.0.0.jar)下载jar包运行：
+运行此游戏需要Java17及以上版本，在[这里](https://github.com/creeper12356/ChineseCheckerPorted/releases/latest)下载最新的jar包运行：
 ```sh
-java -jar ./ChineseCheckerPorted-1.0.0.jar
+java -jar ./ChineseCheckerPorted-x.x.x.jar 
 ```
 
 ### 开发进度
