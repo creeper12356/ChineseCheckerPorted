@@ -3,7 +3,6 @@ package io.github.creeper12356;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.kotcrab.vis.ui.VisUI;
 
 import io.github.creeper12356.screen.BasicMenuScreen;
 import io.github.creeper12356.screen.BoardScreen;
@@ -48,14 +47,12 @@ public class MyGame extends Game {
 
     @Override
     public void create() {
-        VisUI.load();
         screens[0] = new MainMenuScreen(this);
         screens[1] = new StoryMenuScreen(this);
         screens[2] = new RoundMenuScreen(this);
         screens[3] = new BoardScreen(this);
 
         updateChecker.checkUpdate();
-
         setScreen(SCREEN_MAIN_MENU);
     }
 
@@ -66,7 +63,6 @@ public class MyGame extends Game {
         for (Screen screen : screens) {
             screen.dispose();
         }
-        VisUI.dispose();
         System.out.println("Game disposed");
         super.dispose();
     }

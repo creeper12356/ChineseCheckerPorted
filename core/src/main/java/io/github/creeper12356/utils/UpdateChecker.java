@@ -14,6 +14,10 @@ import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+
 import io.github.creeper12356.MyGame;
 
 public class UpdateChecker {
@@ -55,6 +59,13 @@ public class UpdateChecker {
                 System.out.println("Latest version: " + latestVersion);
                 System.out.println("Download URL: " + downloadUrl);
 
+                if (JOptionPane.showConfirmDialog(
+                        null,
+                        "当前版本是" + Resource.version + "，最新版本是" + latestVersion + "，是否更新？",
+                        "更新提示",
+                        JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                    return;
+                }
                 // 下载并替换jar包
                 setProxy();
                 downloadFile(downloadUrl, System.getProperty("user.dir"));
@@ -104,6 +115,17 @@ public class UpdateChecker {
                     int percentCompleted = 0;
                     long fileSize = contentLength;
 
+                    JProgressBar progressBar = new JProgressBar(0, 100);
+                    progressBar.setValue(0);
+                    progressBar.setStringPainted(true);
+
+                    JOptionPane optionPane = new JOptionPane(progressBar, JOptionPane.INFORMATION_MESSAGE,
+                            JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
+                    JDialog dialog = optionPane.createDialog("下载进度");
+
+                    dialog.setModal(false);
+                    dialog.setVisible(true);
+
                     while ((bytesRead = in.read(buffer)) != -1) {
                         outputStream.write(buffer, 0, bytesRead);
                         totalBytesRead += bytesRead;
@@ -111,6 +133,7 @@ public class UpdateChecker {
                         if (percent > percentCompleted) {
                             percentCompleted = percent;
                             System.out.print("下载进度: " + percentCompleted + "%\r");
+                            progressBar.setValue(percentCompleted);
                         }
                     }
                     System.out.println("\n文件下载完成，保存到: " + saveFilePath);
