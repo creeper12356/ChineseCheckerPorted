@@ -7,4 +7,6 @@ dependencies {
   annotationProcessor 'org.projectlombok:lombok:1.18.20'
   implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+  implementation group: 'com.kotcrab.vis', name: 'vis-ui', version: '1.5.1'
+
 }

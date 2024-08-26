@@ -3,6 +3,7 @@ package io.github.creeper12356;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.kotcrab.vis.ui.VisUI;
 
 import io.github.creeper12356.screen.BasicMenuScreen;
 import io.github.creeper12356.screen.BoardScreen;
@@ -10,6 +11,7 @@ import io.github.creeper12356.screen.MainMenuScreen;
 import io.github.creeper12356.screen.RoundMenuScreen;
 import io.github.creeper12356.screen.StoryMenuScreen;
 import io.github.creeper12356.utils.Resource;
+import io.github.creeper12356.utils.UpdateChecker;
 
 public class MyGame extends Game {
     public static final int SCREEN_MAIN_MENU = 0;
@@ -20,6 +22,9 @@ public class MyGame extends Game {
     private BasicMenuScreen[] screens = new BasicMenuScreen[4];
     private int lastScreen = -1;
     private int currentScreen = -1;
+
+    private UpdateChecker updateChecker = new UpdateChecker();
+
     /**
      * @brief 切换屏幕
      * @details 在外部调用此方法切换屏幕
@@ -43,10 +48,14 @@ public class MyGame extends Game {
 
     @Override
     public void create() {
+        VisUI.load();
         screens[0] = new MainMenuScreen(this);
         screens[1] = new StoryMenuScreen(this);
         screens[2] = new RoundMenuScreen(this);
         screens[3] = new BoardScreen(this);
+
+        updateChecker.checkUpdate();
+
         setScreen(SCREEN_MAIN_MENU);
     }
 
@@ -54,9 +63,10 @@ public class MyGame extends Game {
     public void dispose() {
         Resource.dispose();
 
-        for(Screen screen: screens) {
+        for (Screen screen : screens) {
             screen.dispose();
         }
+        VisUI.dispose();
         System.out.println("Game disposed");
         super.dispose();
     }

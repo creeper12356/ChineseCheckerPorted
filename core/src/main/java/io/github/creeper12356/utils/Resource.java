@@ -118,7 +118,7 @@ public class Resource {
     public static float aniDelayDuration;
     public static int pointMgr;
 
-
+    public static String version;
     public static String language;
     // public static Animation aniTalkButton;
 
@@ -753,7 +753,8 @@ public class Resource {
         aniDelayDuration = 0.1f;
         // pointMgr = new PointMgr();
         // aniTalkButton = new Animation();
-
+        
+        version = "v1.0.0";
         language = "en";
 
         // 启动游戏时加载
