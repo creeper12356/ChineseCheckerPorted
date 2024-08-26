@@ -246,6 +246,13 @@ public class RoundMenuScreen extends BasicMenuScreen {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        batch.setProjectionMatrix(camera.combined);
+        rectangleActor.resize(width, height);
+    }
+
+    @Override
     public void dispose() {
         rectangleActor.dispose();
 

@@ -446,6 +446,11 @@ public class BoardScreen extends BasicMenuScreen {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        batch.setProjectionMatrix(camera.combined);
+    }
+    @Override
     public void render(float delta) {
         super.render(delta);
         // System.out.println("this.state == " + state);

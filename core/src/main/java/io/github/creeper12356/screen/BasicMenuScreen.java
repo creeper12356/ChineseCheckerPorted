@@ -38,6 +38,9 @@ public class BasicMenuScreen implements Screen {
         camera = new OrthographicCamera();
         viewport = new FitViewport(Resource.totalWidth, Resource.totalHeight, camera);
 
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        camera.update();
+
         stage = new Stage(viewport);
 
         table = new Table();

@@ -28,6 +28,10 @@ public class RectangleActor extends Actor {
         batch.begin();
     }
 
+    public void resize(int width, int height) {
+        shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
+    }
+
     public void dispose() {
         shapeRenderer.dispose();
     }
