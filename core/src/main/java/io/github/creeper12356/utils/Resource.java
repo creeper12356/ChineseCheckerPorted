@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import io.github.creeper12356.core.Player;
+import io.github.creeper12356.core.WJPlayer;
 
 // import io.github.creeper12356.core.Player;
 
@@ -54,6 +55,7 @@ public class Resource {
     public static int VGAB;
     // public static MainView aMainView;
     public static Player[] players;
+    public static WJPlayer[] wjPlayers;
     public static int gameMode;
     public static int playerCnt;
     public static int stageNum;
@@ -712,6 +714,11 @@ public class Resource {
         players = new Player[3];
         for (int i = 0; i < 3; ++i) {
             players[i] = new Player(i);
+        }
+
+        wjPlayers = new WJPlayer[2];
+        for (int i = 0; i < 2; ++i) {
+            wjPlayers[i] = new WJPlayer(i);
         }
         stageClear = new byte[6];
         gameSpeed = 100;

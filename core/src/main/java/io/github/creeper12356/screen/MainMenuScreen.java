@@ -53,7 +53,7 @@ public class MainMenuScreen extends BasicMenuScreen {
         addImageButton(imgMenuTextUp[1], imgMenuTextDown[1], new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Rank");
+                MainMenuScreen.this.myGame.setScreen(MyGame.SCREEN_VS_MENU);
             }
         });
 

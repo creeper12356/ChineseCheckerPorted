@@ -9,6 +9,8 @@ import io.github.creeper12356.screen.BoardScreen;
 import io.github.creeper12356.screen.MainMenuScreen;
 import io.github.creeper12356.screen.RoundMenuScreen;
 import io.github.creeper12356.screen.StoryMenuScreen;
+import io.github.creeper12356.screen.VSMenuScreen;
+import io.github.creeper12356.screen.WJBoardScreen;
 import io.github.creeper12356.utils.Resource;
 import io.github.creeper12356.utils.UpdateChecker;
 
@@ -17,8 +19,10 @@ public class MyGame extends Game {
     public static final int SCREEN_STORY_MENU = 1;
     public static final int SCREEN_ROUND_MENU = 2;
     public static final int SCREEN_BOARD = 3;
+    public static final int SCREEN_VS_MENU = 4;
+    public static final int SCREEN_WJ_BOARD = 5;
 
-    private BasicMenuScreen[] screens = new BasicMenuScreen[4];
+    private BasicMenuScreen[] screens = new BasicMenuScreen[6];
     private int lastScreen = -1;
     private int currentScreen = -1;
 
@@ -51,6 +55,8 @@ public class MyGame extends Game {
         screens[1] = new StoryMenuScreen(this);
         screens[2] = new RoundMenuScreen(this);
         screens[3] = new BoardScreen(this);
+        screens[4] = new VSMenuScreen(this);
+        screens[5] = new WJBoardScreen(this);
 
         updateChecker.checkUpdate();
         setScreen(SCREEN_MAIN_MENU);

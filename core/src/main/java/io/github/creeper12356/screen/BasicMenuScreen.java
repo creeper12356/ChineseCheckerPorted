@@ -62,7 +62,7 @@ public class BasicMenuScreen implements Screen {
             ImageButton imageButtonOk = getImageButton(imgTouchButtonOk, imgTouchButtonOk, new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Ok");
+                    handleOkClicked();
                 }
             });
             table.add(imageButtonOk).left().expandX();
@@ -131,6 +131,10 @@ public class BasicMenuScreen implements Screen {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public void handleOkClicked() {
+
     }
 
 }

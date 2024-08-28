@@ -2,7 +2,7 @@ package io.github.creeper12356.core;
 /**
  * @brief 棋子类
  */
-class DiaPiece {
+public class DiaPiece {
     byte rank; 
     byte posx = 0;
     byte posy = 0;
