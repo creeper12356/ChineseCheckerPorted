@@ -29,8 +29,9 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
-  sourceCompatibility = 17
-  compileJava {
+  tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
     options.incremental = true
   }
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
