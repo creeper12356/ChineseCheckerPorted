@@ -63,6 +63,8 @@ public class MyGame extends Game {
         for (Screen screen : screens) {
             screen.dispose();
         }
+
+        Resource.saveGame();
         System.out.println("Game disposed");
         super.dispose();
     }

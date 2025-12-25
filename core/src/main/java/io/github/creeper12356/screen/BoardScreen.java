@@ -32,17 +32,15 @@ public class BoardScreen extends BasicMenuScreen {
     public static final int MOVEDIA = 2; // 展示移动棋子提示
     public static final int MOVINGDIA = 3; // 移动棋子的动画
     public static final int COMTHINK = 4; // 电脑思考
-    public static final int COMBO_MSG = 5;
     public static final int TIMEOUT_MSG = 6;
     public static final int CHANGETURN = 7;
     public static final int GAMEOVER = 8;
     public static final int VIEWRESULT = 9;
     public static final int NEXTROUND = 10;
     public static final int NEXTSTAGE = 11;
-    public static final int READYTALK = 12;
     public static final int RETURNVSMENU = 13;
     public static final int GAMEFAILED = 14;
-    public static final int COMMOVEDIA = 15; 
+    public static final int COMMOVEDIA = 15;
     public static final int HOMEIN = 16; // 到达家的动画
 
     public static final int PMSTATE_MAIN = 0;
@@ -62,7 +60,7 @@ public class BoardScreen extends BasicMenuScreen {
     int cnt;
     boolean bTimeOutTalk = false;
     int currentPlayer;
-    int timeOut;
+    float timeOut;
     int timeOutCnt;
     int roundCnt;
     int[] winCnt = new int[2];
@@ -148,31 +146,61 @@ public class BoardScreen extends BasicMenuScreen {
             "让你见识下我精湛的技术。",
             "哈哈哈！服不服输？",
             "让我来教你几招吧。" };
-    static final String[] strTALK_YC = new String[] { "我能行的！",
+    static final String[] strTALK_YC = new String[] {
+            // TALK_START
+            "我能行的！",
             "不采取行动就像你是故意输的！",
-            "哦呵！", "加油！", "我肯定会赢的！",
-            "现在基本上已经赢了！", "天啊！",
-            "我还能做得更好吗？", "哎！非常抱歉！",
-            "哎！", "唉！", "这次我从你这学到了不少！",
-            "哈哈哈！", "看我的精彩表演！",
-            "看我精彩的移动！", "哈哈哈哈",
+            "哦呵！",
+            "加油！",
+            "我肯定会赢的！",
+            "现在基本上已经赢了！",
+
+            // TALK_LOSE
+            "天啊！",
+            "我还能做得更好吗？",
+            "哎！非常抱歉！",
+            "哎！",
+            "唉！",
+            "这次我从你这学到了不少！",
+
+            // TALK_MYCOMBO
+            "哈哈哈！",
+            "看我的精彩表演！",
+            "看我精彩的移动！",
+            "哈哈哈哈",
             "今天是我的幸运日！",
             "今天是我的幸运日！",
+
+            // TALK_OPPONENTCOMBO (not used)
             "不要再移这么长了！",
             "这次你走得很棒！",
             "请不要再走这么长了！",
-            "看起来走得不错哦！", "嗯...很好很好！",
-            "王者终究是王者！", "哈哈，我赢了！",
+            "看起来走得不错哦！",
+            "嗯...很好很好！",
+            "王者终究是王者！",
+
+            // TALK_WIN
+            "哈哈，我赢了！",
             "哈哈哈哈，我赢了，我赢了",
             "这次比赛我赢了我。",
             "呵呵，我赢了。",
             "啊哈哈哈哈，我赢了",
-            "啊哈哈哈，赢了赢了..." };
-    static final String[] strTALK_YC_COMBO = new String[] { "还不错。",
-            "请走得短一点！", "看起来不错。",
-            "这次你走得不错...", "没办法了...", "哎呀！",
-            "不错！", "还不赖...", "请走得短一点。",
-            "不错！", "还不赖...", "请走得短一点。" };
+            "啊哈哈哈，赢了赢了..."
+    };
+    static final String[] strTALK_YC_COMBO = new String[] {
+            "还不错。",
+            "请走得短一点！",
+            "看起来不错。",
+            "这次你走得不错...",
+            "没办法了...",
+            "哎呀！",
+            "不错！",
+            "还不赖...",
+            "请走得短一点。",
+            "不错！",
+            "还不赖...",
+            "请走得短一点。"
+    };
 
     static int[] enemyFaceGood = new int[] { 11, 22, 22, 24, 16, 16, 20, 20, 22, 28, 8, 30 };
     static int[] enemyFaceBad = new int[] { 12, 24, 18, 22, 16, 16, 20, 22, 20, 22, 2, 18 };
@@ -326,12 +354,6 @@ public class BoardScreen extends BasicMenuScreen {
         // this.imgShadow[0] = Image.createImage((String) "/shadow_0.png");
         // this.imgShadow[1] = Image.createImage((String) "/shadow_1.png");
         // this.imgShadow[2] = Image.createImage((String) "/shadow_2.png");
-        // this.imgMoveNum[0] = Image.createImage((String) "/movenum_1.png");
-        // this.imgMoveNum[1] = Image.createImage((String) "/movenum_3.png");
-        // this.imgMoveNum[2] = Image.createImage((String) "/movenum_6.png");
-        // this.imgMoveNum[3] = Image.createImage((String) "/movenum_9.png");
-        // this.imgMoveNum[4] = Image.createImage((String) "/movenum_7.png");
-        // this.imgMoveNum[5] = Image.createImage((String) "/movenum_4.png");
         // this.imgUI[0] = Image.createImage((String) "/uichip_0.png");
         // this.imgUI[1] = Image.createImage((String) "/uichip_1.png");
         // this.imgUI[2] = Image.createImage((String) "/menuchip_0.png");
@@ -369,18 +391,7 @@ public class BoardScreen extends BasicMenuScreen {
 
         // migrated from init() function
 
-        // Resource.aTimer2.setTime(Resource.gameSpeed);
-        // Resource.aTimer2.setTimerListener(this);
-        // Resource.aTimer2.resume();
         this.elapsedtime = System.currentTimeMillis();
-        // this.imgTouchEffect = Resource.loadImage("/toucheffect.png");
-        // Image image = Resource.loadImage("/background.png");
-        // Resource.getBackBuffer().drawImage(image, 0, 0, 0);
-        // image = null;
-        // Image image2 = Resource.loadImage("/board.png");
-        // Resource.getBackBuffer().drawImage(image2, Resource.boardPosX,
-        // Resource.boardPosY, 20);
-        // image2 = null;
         // this.imgPopupMenu[0] = Resource.loadImage("/menuchip_1.png");
         // this.imgPopupMenu[1] = Resource.loadImage("/selicon_0.png");
         this.diaBoard.clearPassed();
@@ -391,17 +402,6 @@ public class BoardScreen extends BasicMenuScreen {
             this.players[1].init(this.players[1].getType(), 3, this.players[1].getDiaType(), this.diaBoard);
             this.replaceImgDia(1);
             this.players[2].setType(Player.PLAYERTYPE_OFF);
-
-            if (Resource.gameMode == Resource.GAMEMODE_STORY) {
-                // TODO:
-                // this.imgPlayer[0] = Resource.imgPlayer[0];
-                // this.imgPlayer[1] = Resource.imgPlayer[1];
-                // this.imgPlayer[2] = Resource.imgPlayer[2];
-                // this.imgEnemy[0] = Resource.imgEnemy[0];
-                // this.imgEnemy[1] = Resource.imgEnemy[1];
-                // this.imgEnemy[2] = Resource.imgEnemy[2];
-            }
-
         } else if (Resource.playerCnt == 3) {
             this.players[0].init(this.players[0].getType(), 0, this.players[0].getDiaType(), this.diaBoard);
             this.replaceImgDia(0);
@@ -410,7 +410,7 @@ public class BoardScreen extends BasicMenuScreen {
             this.players[2].init(this.players[2].getType(), 4, this.players[2].getDiaType(), this.diaBoard);
             this.replaceImgDia(2);
         }
-        this.timeOut = 0;
+        this.timeOut = 0.0f;
         this.bTimeOutTalk = false;
         this.currentPlayer = 0;
         this.winCnt[0] = 0;
@@ -429,20 +429,13 @@ public class BoardScreen extends BasicMenuScreen {
             this.showmessageCnt = 0;
             this.showmessageOrder[0] = 1;
             this.showmessageOrder[1] = 0;
-            // this.strmgr = new
-            // StringMgr(strREADY[this.players[this.showmessageOrder[this.showmessageCnt]].charID],
-            // 14,
-            // 1);
-            // this.strmgr.start();
-            // this.strmgr.setAutoMode();
-            // Utils.playSound(12, false);
         } else {
             this.state = GAMEREADY;
             // Utils.playSound(13, false);
         }
-        // this.aniMoveGuide.init(2, 1600, false);
-        // this.aniJumpAvata.init(4, 200, true);
-        // this.aniStateUI.init(2, 200, true);
+
+        System.out.println("Ready talk: " + strREADY[players[1].getCharID()]);
+        System.out.println("Ready talk: " + getGameTalk(TALK_START, players[1].getCharID()));
     }
 
     @Override
@@ -450,63 +443,21 @@ public class BoardScreen extends BasicMenuScreen {
         super.resize(width, height);
         batch.setProjectionMatrix(camera.combined);
     }
+
     @Override
     public void render(float delta) {
         super.render(delta);
-        // System.out.println("this.state == " + state);
+        update(delta);
         batch.begin();
         batch.draw(imgBoard, 0, Resource.halfHeight - imgBoard.getHeight() / 2 - 10);
 
         // migrated from paint()
-        // int n;
-        // int n2;
         // if (this.showPopupMenu == 1) {
         // this.drawPopupMenu(graphics);
-        // TouchDo.setTouchArea(6, this.state, this.popupmenuState);
         // return;
         // }
-        // TouchDo.setTouchArea(6, this.state, -1);
-        if ((this.state == SELECTDIA || this.state == MOVEDIA) &&
-                Resource.gameMode == Resource.GAMEMODE_STORY &&
-                !this.bTimeOutTalk) {
-            // 催促对话
 
-            // this.timeOut += 100;
-            // if (this.timeOut >= 8000) {
-            // ++this.timeOutCnt;
-            // this.timeOutCnt %= 3;
-            // this.bTimeOutTalk = true;
-            // this.showmessageCnt = 0;
-            // this.showmessageOrder[0] = 1;
-            // this.strmgr = new StringMgr(strTIMEOUT[(this.players[1].charID - 1) * 3 +
-            // this.timeOutCnt], 14, 1);
-            // this.strmgr.start();
-            // this.strmgr.setAutoMode();
-            // Utils.playSound(12, false);
-            // }
-        }
-        if (this.state == READYTALK) {
-            this.drawAvata(batch);
-            // this.drawShadow(graphics);
-            this.drawDias(batch);
-            // this.drawBattleTalk(graphics);
-            // if (this.strmgr.getEndAutoMode()) {
-            // ++this.showmessageCnt;
-            // if (this.showmessageCnt < 2) {
-            // this.strmgr = this.showmessageOrder[this.showmessageCnt] == 1
-            // ? new
-            // StringMgr(strREADY[this.players[this.showmessageOrder[this.showmessageCnt]].charID],
-            // 14, 1)
-            // : new StringMgr(this.getGameTalk(0, this.players[1].charID), 14, 1);
-            // this.strmgr.start();
-            // this.strmgr.setAutoMode();
-            // Utils.playSound(12, false);
-            // } else {
-            // this.state = 0;
-            // Utils.playSound(13, false);
-            // }
-            // }
-        } else if (this.state == GAMEREADY) {
+        if (this.state == GAMEREADY) {
             // this.drawPoint(graphics);
             this.drawAvata(batch);
             // this.drawShadow(graphics);
@@ -555,41 +506,6 @@ public class BoardScreen extends BasicMenuScreen {
             this.drawAvata(batch);
             // this.drawShadow(graphics);
             this.drawDias(batch);
-            // if (this.aniDiaFrame >= 4) {
-            if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_CPU) {
-                this.players[this.currentPlayer].getComMove(this.players[0]);
-
-                Image imgMovingDia = getInitMoveDiaActionImage();
-                SequenceAction sequence = Actions.sequence();
-                // 添加多个移动动画
-                for (int i = 0; i < players[currentPlayer].getMovingListCnt(); ++i) {
-                    int movingDir = players[currentPlayer].getMovingList()[i];
-                    players[currentPlayer].computeMoveGuide();
-                    this.players[this.currentPlayer].initMovingDia(movingDir);
-                    this.addMoveDiaAction(sequence, movingDir, players[currentPlayer].getMoveGuide(movingDir));
-                    sequence.addAction(Actions.delay(Resource.aniDelayDuration));
-                }
-                sequence.addAction(new RunnableAction() {
-                    @Override
-                    public void run() {
-                        stageAni.clear();
-                        timeOut = 0;
-                        endTurn();
-                    }
-                });
-                imgMovingDia.addAction(sequence);
-                stageAni.addActor(imgMovingDia);
-                this.state = MOVINGDIA;
-                this.timeOut = 0;
-                // this.aniDiaFrame = 0;
-                // this.aniDiaMaxFrame = 5;
-                // this.aniDiaSumTime = 0;
-                // this.aniDiaFrameDelay = 200;
-                // this.aniDiaRepeat = false;
-            }
-            // } else {
-            // ++this.aniDiaFrame;
-            // }
         } else if (this.state == MOVEDIA) {
             // this.drawPoint(graphics);
             this.drawAvata(batch);
@@ -608,35 +524,6 @@ public class BoardScreen extends BasicMenuScreen {
             this.drawAvata(batch);
             // this.drawShadow(graphics);
             this.drawDias(batch);
-        } else if (this.state == COMBO_MSG) {
-            // this.drawPoint(graphics);
-            this.drawAvata(batch);
-            // this.drawShadow(graphics);
-            this.drawDias(batch);
-            // this.drawBattleTalk(graphics);
-            // if (this.strmgr.getEndAutoMode()) {
-            // ++this.showmessageCnt;
-            // if (this.showmessageCnt < 2) {
-            // this.state = 5;
-            // if (this.showmessageOrder[this.showmessageCnt] == 1) {
-            // n2 = Resource.getRand(2);
-            // this.strmgr = new StringMgr(strOPPONENTCOMBO[(this.players[1].charID - 1) * 2
-            // + n2], 14, 1);
-            // } else {
-            // this.strmgr = new StringMgr(this.getGameTalk(1, this.players[1].charID), 14,
-            // 1);
-            // }
-            // this.strmgr.start();
-            // this.strmgr.setAutoMode();
-            // Utils.playSound(12, false);
-            // } else {
-            // this.players[0].charFace = 0;
-            // this.players[1].charFace = 0;
-            // this.players[this.currentPlayer].endTurn();
-            // this.diaBoard.clearPassed();
-            // this.changeNextPlayer();
-            // }
-            // }
         } else if (this.state == CHANGETURN) {
             // this.drawPoint(graphics);
             this.drawAvata(batch);
@@ -737,12 +624,6 @@ public class BoardScreen extends BasicMenuScreen {
         // this.showDoNotMove = -1;
         // }
         // }
-        // if (this.bTimeOutTalk) {
-        // this.drawBattleTalk(graphics);
-        // if (this.strmgr.getEndAutoMode()) {
-        // this.bTimeOutTalk = false;
-        // this.timeOut = 0;
-        // }
         // }
 
         batch.end();
@@ -752,6 +633,54 @@ public class BoardScreen extends BasicMenuScreen {
         }
         stageAni.act(delta);
         stageAni.draw();
+    }
+
+    private void update(float delta) {
+        if (Resource.gameMode == Resource.GAMEMODE_STORY &&
+                (state == GAMEREADY || state == SELECTDIA || state == MOVEDIA)) {
+            timeOut += delta;
+            // TODO: 修改magic number
+            if (timeOut >= 5.0f) {
+                ++timeOutCnt;
+                timeOutCnt %= 3;
+                bTimeOutTalk = true;
+                System.out.println("time out talk: " + strTIMEOUT[(players[1].getCharID() - 1) * 3 + timeOutCnt]);
+
+                timeOut = 0.0f;
+                // this.showmessageCnt = 0;
+                // this.showmessageOrder[0] = 1;
+                // Utils.playSound(12, false);
+            }
+        }
+
+        if (state == COMTHINK) {
+            if (this.players[this.currentPlayer].getType() == Player.PLAYERTYPE_CPU) {
+                this.players[this.currentPlayer].getComMove(this.players[0]);
+
+                Image imgMovingDia = getInitMoveDiaActionImage();
+                SequenceAction sequence = Actions.sequence();
+
+                for (int i = 0; i < players[currentPlayer].getMovingListCnt(); ++i) {
+                    int movingDir = players[currentPlayer].getMovingList()[i];
+                    players[currentPlayer].computeMoveGuide();
+                    this.players[this.currentPlayer].initMovingDia(movingDir);
+                    this.addMoveDiaAction(sequence, movingDir, players[currentPlayer].getMoveGuide(movingDir));
+                    sequence.addAction(Actions.delay(Resource.aniDelayDuration));
+                }
+                sequence.addAction(new RunnableAction() {
+                    @Override
+                    public void run() {
+                        stageAni.clear();
+                        timeOut = 0.0f;
+                        endTurn();
+                    }
+                });
+                imgMovingDia.addAction(sequence);
+                stageAni.addActor(imgMovingDia);
+                this.state = MOVINGDIA;
+                this.timeOut = 0.0f;
+            }
+        }
     }
 
     @Override
@@ -1241,7 +1170,6 @@ public class BoardScreen extends BasicMenuScreen {
     }
 
     private void changeNextPlayer() {
-        this.players[this.currentPlayer].sortingDia();
         do {
             ++this.currentPlayer;
             if (this.currentPlayer < 3)
@@ -1259,7 +1187,7 @@ public class BoardScreen extends BasicMenuScreen {
             // this.aniDiaFrame = 0;
         }
         // this.aniJumpAvata.init(4, 200, true);
-        this.timeOut = 0;
+        this.timeOut = 0.0f;
     }
 
     /**
@@ -1272,7 +1200,8 @@ public class BoardScreen extends BasicMenuScreen {
             if (Resource.gameMode == Resource.GAMEMODE_STORY) {
                 if (this.currentPlayer == 0) {
                     this.bWin = true;
-                    // this.strmgr = new StringMgr(strLOSE[this.players[1].charID], 14, 1);
+                    System.out.println("Win talk: " + getGameTalk(TALK_WIN, players[1].getCharID()));
+                    System.out.println("Win talk: " + strLOSE[players[1].getCharID()]);
                     this.players[0].setCharFace(1);
                     this.players[1].setCharFace(2);
                     if (Resource.gameMode == Resource.GAMEMODE_STORY) {
@@ -1281,15 +1210,14 @@ public class BoardScreen extends BasicMenuScreen {
                     }
                 } else {
                     this.bWin = false;
-                    // this.strmgr = new StringMgr(strWIN[this.players[1].charID], 14, 1);
+                    System.out.println("Lose talk: " + strWIN[players[1].getCharID()]);
+                    System.out.println("Lose talk: " + getGameTalk(TALK_LOSE, players[1].getCharID()));
                     this.players[0].setCharFace(2);
                     this.players[1].setCharFace(1);
                 }
                 this.showmessageOrder[0] = 1;
                 this.showmessageOrder[1] = 0;
                 this.showmessageCnt = 0;
-                // this.strmgr.start();
-                // this.strmgr.setAutoMode();
                 // Utils.playSound(12, false);
                 this.state = GAMEOVER;
 
@@ -1347,38 +1275,35 @@ public class BoardScreen extends BasicMenuScreen {
         }
         // 本局仍未结束
         // TODO: 连击动画
-        // if (this.players[this.currentPlayer].getMoveCnt() > 2 && Resource.gameMode ==
-        // Resource.GAMEMODE_STORY) {
-        // this.state = 5;
-        // this.showmessageCnt = 0;
-        // if (this.currentPlayer == 0) {
-        // this.showmessageOrder[0] = 0;
-        // this.showmessageOrder[1] = 1;
-        // this.players[0].setCharFace(1);
-        // this.players[1].setCharFace(2);
-        // } else {
-        // this.showmessageOrder[0] = 1;
-        // this.showmessageOrder[1] = 0;
-        // this.players[0].setCharFace(2);
-        // this.players[1].setCharFace(1);
-        // }
-        // if (this.bTimeOutTalk) {
-        // this.bTimeOutTalk = false;
-        // }
-        // // this.strmgr = this.showmessageOrder[this.showmessageCnt] == 1
-        // // ? new
-        // //
-        // StringMgr(strMYCOMBO[this.players[this.showmessageOrder[this.showmessageCnt]].charID],
-        // // 14, 1)
-        // // : new StringMgr(this.getGameTalk(2, this.players[1].charID), 14, 1);
-        // // this.strmgr.start();
-        // // this.strmgr.setAutoMode();
-        // // Utils.playSound(12, false);
-        // } else {
-        this.players[this.currentPlayer].endTurn();
-        this.diaBoard.clearPassed();
-        this.changeNextPlayer();
-        // }
+        if (Resource.gameMode == Resource.GAMEMODE_STORY && players[this.currentPlayer].getMoveCnt() > 2) {
+            // state = COMBO_MSG;
+            showmessageCnt = 0;
+            if (this.currentPlayer == 0) {
+                this.showmessageOrder[0] = 0;
+                this.showmessageOrder[1] = 1;
+                this.players[0].setCharFace(1);
+                this.players[1].setCharFace(2);
+                System.out.println("Player combo talk: " + getGameTalk(TALK_MYCOMBO, players[1].getCharID()));
+                System.out.println("Player combo talk: "
+                        + strOPPONENTCOMBO[(players[1].getCharID() - 1) * 2 + Resource.getRand(2)]);
+            } else {
+                this.showmessageOrder[0] = 1;
+                this.showmessageOrder[1] = 0;
+                this.players[0].setCharFace(2);
+                this.players[1].setCharFace(1);
+                System.out.println("AI combo talk: " + strMYCOMBO[players[1].getCharID()]);
+                System.out.println("AI combo talk: " + getGameTalk(TALK_OPPONENTCOMBO, players[1].getCharID()));
+            }
+
+            this.players[0].setCharFace(0);
+            this.players[1].setCharFace(0);
+        }
+
+        players[currentPlayer].endTurn();
+        players[currentPlayer].sortingDia();
+        diaBoard.clearPassed();
+        diaBoard.updateBoard(players[currentPlayer].getDia(), currentPlayer);
+        changeNextPlayer();
     }
 
     /**
@@ -1419,5 +1344,35 @@ public class BoardScreen extends BasicMenuScreen {
     public Stage getStage() {
         // 在棋盘屏幕中，stageMove是响应点击事件的stage
         return stageMove;
+    }
+
+    private String getGameTalk(int talkType, int playerCharID) {
+        int n3 = 0;
+        int[] nArray = new int[] { 0, 1, 2, 3, 4, 5 };
+        // int[] nArray2 = new int[] { 18, 19, 20, 21, 22, 23 };
+        int[] nArray3 = new int[] { 12, 13, 14, 15, 16, 17 };
+        int[] nArray4 = new int[] { 24, 25, 26, 27, 28, 29 };
+        int[] nArray5 = new int[] { 6, 7, 8, 9, 10, 11 };
+        switch (talkType) {
+            case TALK_START: {
+                n3 = nArray[playerCharID - 1];
+                break;
+            }
+            case TALK_OPPONENTCOMBO: {
+                return strTALK_YC_COMBO[(playerCharID - 1) * 2 + Resource.getRand(2)];
+            }
+            case TALK_MYCOMBO: {
+                n3 = nArray3[playerCharID - 1];
+                break;
+            }
+            case TALK_WIN: {
+                n3 = nArray4[playerCharID - 1];
+                break;
+            }
+            case TALK_LOSE: {
+                n3 = nArray5[playerCharID - 1];
+            }
+        }
+        return strTALK_YC[n3];
     }
 }

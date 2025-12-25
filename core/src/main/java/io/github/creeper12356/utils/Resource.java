@@ -485,7 +485,7 @@ public class Resource {
     // }
 
     public static void newGame() {
-        stageNum = 0;
+        stageNum = 1;
         pointMgr = 0;
         accuMove = 0;
         accuCombo = 0;
@@ -526,7 +526,6 @@ public class Resource {
             byte[] byArray = Resource.loadData(System.getProperty("user.home") + "/.chinese.checker.dat");
             if (byArray == null) {
                 Resource.newGame();
-                Resource.saveGame();
                 return;
             }
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byArray);
@@ -547,7 +546,6 @@ public class Resource {
         } catch (IOException iOException) {
             iOException.printStackTrace();
             Resource.newGame();
-            Resource.saveGame();
         }
     }
 

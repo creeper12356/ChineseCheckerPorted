@@ -122,6 +122,7 @@ public class Player {
             this.dia[i].posy = Resource.homes[this.homePosition * 20 + i * 2 + 1];
         }
         this.sortingDia();
+        this.diaBoard.updateBoard(this.dia, this.index);
     }
 
     public int getDiaRank(int n) {
@@ -156,26 +157,11 @@ public class Player {
         return this.dia[this.currentSel].pixy / 10;
     }
 
-    /**
-     * @brief 根据posy排序棋子(从小到大)
-     */
     public void sortingDia() {
-        int n;
-        for (n = 0; n < 9; ++n) {
-            int n2 = n;
-            for (int i = n + 1; i < 10; ++i) {
-                if (this.dia[n2].posy <= this.dia[i].posy)
-                    continue;
-                n2 = i;
-            }
-            DiaPiece diaPiece = this.dia[n2];
-            this.dia[n2] = this.dia[n];
-            this.dia[n] = diaPiece;
-        }
-        for (n = 0; n < 10; ++n) {
-            this.diaBoard.setOnDia(this.dia[n].posx, this.dia[n].posy, this.index + this.dia[n].rank);
-        }
+        java.util.Arrays.sort(this.dia, (a, b) -> Integer.compare(a.posy, b.posy));
     }
+
+    
 
     /**
      * @brief 左/右搜索，找到最近的棋子并选中

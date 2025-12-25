@@ -105,6 +105,7 @@ public class DiaBoard {
         return 0;
     }
 
+
     void setOnDia(int posx, int posy, int dia) {
         this.onDia[posx][posy] = (byte) dia;
     }
@@ -152,6 +153,17 @@ public class DiaBoard {
             for (int j = 0; j < BOARD_WID; ++j) {
                 this.onDia[j][i] = -1;
             }
+        }
+    }
+
+    /**
+     * @brief 根据DiaPiece数组更新棋盘上的棋子
+     * @param diaPieces 棋子数组
+     * @param playerIndex 玩家编号
+     */
+    public void updateBoard(DiaPiece[] diaPieces, int playerIndex) {
+        for (DiaPiece diaPiece : diaPieces) {
+            setOnDia(diaPiece.posx, diaPiece.posy, playerIndex + diaPiece.rank);
         }
     }
 }
