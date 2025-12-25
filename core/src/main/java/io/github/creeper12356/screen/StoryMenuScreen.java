@@ -36,6 +36,7 @@ public class StoryMenuScreen extends BasicMenuScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Resource.newGame();
+                Resource.saveGame();
                 StoryMenuScreen.this.myGame.setScreen(MyGame.SCREEN_ROUND_MENU);
             }
         });

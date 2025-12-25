@@ -32,7 +32,6 @@ public class BoardScreen extends BasicMenuScreen {
     public static final int MOVEDIA = 2; // 展示移动棋子提示
     public static final int MOVINGDIA = 3; // 移动棋子的动画
     public static final int COMTHINK = 4; // 电脑思考
-    public static final int TIMEOUT_MSG = 6;
     public static final int CHANGETURN = 7;
     public static final int GAMEOVER = 8;
     public static final int VIEWRESULT = 9;
@@ -171,7 +170,7 @@ public class BoardScreen extends BasicMenuScreen {
             "今天是我的幸运日！",
             "今天是我的幸运日！",
 
-            // TALK_OPPONENTCOMBO (not used)
+            // TALK_OPPONENTCOMBO (deprecated)
             "不要再移这么长了！",
             "这次你走得很棒！",
             "请不要再走这么长了！",
@@ -202,9 +201,9 @@ public class BoardScreen extends BasicMenuScreen {
             "请走得短一点。"
     };
 
-    static int[] enemyFaceGood = new int[] { 11, 22, 22, 24, 16, 16, 20, 20, 22, 28, 8, 30 };
-    static int[] enemyFaceBad = new int[] { 12, 24, 18, 22, 16, 16, 20, 22, 20, 22, 2, 18 };
-    static int[] myFace = new int[] { 6, 18, 6, 10 };
+    static int[] enemyFaceGood = new int[] { 11, 26, 22, 20, 16, 24, 20, 25, 22, 16, 8, 19 };
+    static int[] enemyFaceBad = new int[] { 12, 24, 18, 18, 16, 24, 20, 25, 20, 15, 2, 18 };
+    static int[] myFace = new int[] { 6, 25, 6, 25 };
 
     public BoardScreen(MyGame myGame) {
         super(myGame, false, false);
@@ -799,21 +798,19 @@ public class BoardScreen extends BasicMenuScreen {
             batch.draw(Resource.imgEnemy[0], 0, Resource.totalHeight - Resource.imgEnemy[0].getHeight());
             if (this.players[0].getCharFace() != 0) {
                 if (this.players[0].getCharFace() == 1) {
-                    // graphics.drawImage(this.imgPlayer[1],
-                    // Resource.totalWidth - this.imgPlayer[0].getWidth() + myFace[0],
-                    // Resource.totalHeight - this.imgPlayer[0].getHeight() + myFace[1], 4 | 0x10);
+                    batch.draw(Resource.imgPlayer[1], Resource.totalWidth - Resource.imgPlayer[0].getWidth() + myFace[0], myFace[1]);
                 } else if (this.players[0].getCharFace() == 2) {
-                    // graphics.drawImage(this.imgPlayer[2],
-                    // Resource.totalWidth - this.imgPlayer[0].getWidth() + myFace[2],
-                    // Resource.totalHeight - this.imgPlayer[0].getHeight() + myFace[3], 4 | 0x10);
+                    batch.draw(Resource.imgPlayer[2], Resource.totalWidth - Resource.imgPlayer[0].getWidth() + myFace[2], myFace[3]);
                 }
             }
             if (this.players[1].getCharFace() != 0) {
                 if (this.players[1].getCharFace() == 1) {
+                    batch.draw(Resource.imgEnemy[1], enemyFaceGood[(players[1].getCharID() - 1) * 2], Resource.totalHeight - Resource.imgEnemy[0].getHeight() + enemyFaceGood[(players[1].getCharID() - 1) * 2 + 1]);
                     // graphics.drawImage(this.imgEnemy[1], enemyFaceGood[(this.players[1].charID -
                     // 1) * 2],
                     // enemyFaceGood[(this.players[1].charID - 1) * 2 + 1], 4 | 0x10);
                 } else if (this.players[1].getCharFace() == 2) {
+                    batch.draw(Resource.imgEnemy[2], enemyFaceBad[(players[1].getCharID() - 1) * 2], Resource.totalHeight - Resource.imgEnemy[0].getHeight() + enemyFaceBad[(players[1].getCharID() - 1) * 2 + 1]);
                     // graphics.drawImage(this.imgEnemy[2], enemyFaceBad[(this.players[1].charID -
                     // 1) * 2],
                     // enemyFaceBad[(this.players[1].charID - 1) * 2 + 1], 4 | 0x10);
