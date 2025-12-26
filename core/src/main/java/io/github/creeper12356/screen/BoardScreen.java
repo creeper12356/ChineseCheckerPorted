@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.Timer;
 import io.github.creeper12356.MyGame;
 import io.github.creeper12356.core.DiaBoard;
 import io.github.creeper12356.core.Player;
+import io.github.creeper12356.renderer.ClassicTalkRenderer;
+import io.github.creeper12356.renderer.TalkRenderer;
 import io.github.creeper12356.utils.Resource;
 
 public class BoardScreen extends BasicMenuScreen {
@@ -105,6 +107,8 @@ public class BoardScreen extends BasicMenuScreen {
     // Image[] imgPopupMenu = new Image[2];
     // Image imgHomeIn;
     // Image imgTouchEffect;
+
+    TalkRenderer talkRenderer;
 
     static final String[] strTIMEOUT = new String[] { "你花太长时间了！",
             "你用不用这么久啊！",
@@ -382,6 +386,9 @@ public class BoardScreen extends BasicMenuScreen {
         // // empty catch block
         // }
         this.timeOutCnt = 0;
+
+        talkRenderer = new ClassicTalkRenderer();
+        talkRenderer.setTalkTimeout(1.0f);
     }
 
     @Override
@@ -433,8 +440,12 @@ public class BoardScreen extends BasicMenuScreen {
             // Utils.playSound(13, false);
         }
 
-        System.out.println("Ready talk: " + strREADY[players[1].getCharID()]);
-        System.out.println("Ready talk: " + getGameTalk(TALK_START, players[1].getCharID()));
+        // System.out.println("Ready talk: " + strREADY[players[1].getCharID()]);
+        // System.out.println("Ready talk: " + getGameTalk(TALK_START,
+        // players[1].getCharID()));
+
+        talkRenderer.addTalkToQueue(strREADY[players[1].getCharID()], null, null);
+        talkRenderer.addTalkToQueue(getGameTalk(TALK_START, players[1].getCharID()), null, null);
     }
 
     @Override
@@ -455,6 +466,8 @@ public class BoardScreen extends BasicMenuScreen {
         // this.drawPopupMenu(graphics);
         // return;
         // }
+
+        talkRenderer.render(delta);
 
         if (this.state == GAMEREADY) {
             // this.drawPoint(graphics);
@@ -639,11 +652,14 @@ public class BoardScreen extends BasicMenuScreen {
                 (state == GAMEREADY || state == SELECTDIA || state == MOVEDIA)) {
             timeOut += delta;
             // TODO: 修改magic number
-            if (timeOut >= 5.0f) {
+            if (timeOut >= 10.0f) {
                 ++timeOutCnt;
                 timeOutCnt %= 3;
                 bTimeOutTalk = true;
-                System.out.println("time out talk: " + strTIMEOUT[(players[1].getCharID() - 1) * 3 + timeOutCnt]);
+                // System.out.println("time out talk: " + strTIMEOUT[(players[1].getCharID() -
+                // 1) * 3 + timeOutCnt]);
+
+                talkRenderer.addTalkToQueue(strTIMEOUT[(players[1].getCharID() - 1) * 3 + timeOutCnt], null, null);
 
                 timeOut = 0.0f;
                 // this.showmessageCnt = 0;
@@ -798,19 +814,25 @@ public class BoardScreen extends BasicMenuScreen {
             batch.draw(Resource.imgEnemy[0], 0, Resource.totalHeight - Resource.imgEnemy[0].getHeight());
             if (this.players[0].getCharFace() != 0) {
                 if (this.players[0].getCharFace() == 1) {
-                    batch.draw(Resource.imgPlayer[1], Resource.totalWidth - Resource.imgPlayer[0].getWidth() + myFace[0], myFace[1]);
+                    batch.draw(Resource.imgPlayer[1],
+                            Resource.totalWidth - Resource.imgPlayer[0].getWidth() + myFace[0], myFace[1]);
                 } else if (this.players[0].getCharFace() == 2) {
-                    batch.draw(Resource.imgPlayer[2], Resource.totalWidth - Resource.imgPlayer[0].getWidth() + myFace[2], myFace[3]);
+                    batch.draw(Resource.imgPlayer[2],
+                            Resource.totalWidth - Resource.imgPlayer[0].getWidth() + myFace[2], myFace[3]);
                 }
             }
             if (this.players[1].getCharFace() != 0) {
                 if (this.players[1].getCharFace() == 1) {
-                    batch.draw(Resource.imgEnemy[1], enemyFaceGood[(players[1].getCharID() - 1) * 2], Resource.totalHeight - Resource.imgEnemy[0].getHeight() + enemyFaceGood[(players[1].getCharID() - 1) * 2 + 1]);
+                    batch.draw(Resource.imgEnemy[1], enemyFaceGood[(players[1].getCharID() - 1) * 2],
+                            Resource.totalHeight - Resource.imgEnemy[0].getHeight()
+                                    + enemyFaceGood[(players[1].getCharID() - 1) * 2 + 1]);
                     // graphics.drawImage(this.imgEnemy[1], enemyFaceGood[(this.players[1].charID -
                     // 1) * 2],
                     // enemyFaceGood[(this.players[1].charID - 1) * 2 + 1], 4 | 0x10);
                 } else if (this.players[1].getCharFace() == 2) {
-                    batch.draw(Resource.imgEnemy[2], enemyFaceBad[(players[1].getCharID() - 1) * 2], Resource.totalHeight - Resource.imgEnemy[0].getHeight() + enemyFaceBad[(players[1].getCharID() - 1) * 2 + 1]);
+                    batch.draw(Resource.imgEnemy[2], enemyFaceBad[(players[1].getCharID() - 1) * 2],
+                            Resource.totalHeight - Resource.imgEnemy[0].getHeight()
+                                    + enemyFaceBad[(players[1].getCharID() - 1) * 2 + 1]);
                     // graphics.drawImage(this.imgEnemy[2], enemyFaceBad[(this.players[1].charID -
                     // 1) * 2],
                     // enemyFaceBad[(this.players[1].charID - 1) * 2 + 1], 4 | 0x10);
@@ -1197,18 +1219,56 @@ public class BoardScreen extends BasicMenuScreen {
             if (Resource.gameMode == Resource.GAMEMODE_STORY) {
                 if (this.currentPlayer == 0) {
                     this.bWin = true;
-                    System.out.println("Win talk: " + getGameTalk(TALK_WIN, players[1].getCharID()));
-                    System.out.println("Win talk: " + strLOSE[players[1].getCharID()]);
-                    this.players[0].setCharFace(1);
-                    this.players[1].setCharFace(2);
+                    // System.out.println("Win talk: " + getGameTalk(TALK_WIN,
+                    // players[1].getCharID()));
+                    // System.out.println("Win talk: " + strLOSE[players[1].getCharID()]);
+
+                    talkRenderer.addTalkToQueue(
+                            getGameTalk(TALK_WIN, players[1].getCharID()),
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    players[0].setCharFace(1);
+                                    players[1].setCharFace(2);
+                                }
+                            },
+                            null);
+                    talkRenderer.addTalkToQueue(
+                            strLOSE[players[1].getCharID()],
+                            null,
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    players[0].setCharFace(0);
+                                    players[1].setCharFace(0);
+                                }
+                            });
+
                     if (Resource.gameMode == Resource.GAMEMODE_STORY) {
                         // Resource.pointMgr.addPoint(100);
                         this.stagePoint += 100;
                     }
                 } else {
                     this.bWin = false;
-                    System.out.println("Lose talk: " + strWIN[players[1].getCharID()]);
-                    System.out.println("Lose talk: " + getGameTalk(TALK_LOSE, players[1].getCharID()));
+
+                    talkRenderer.addTalkToQueue(
+                            strWIN[players[1].getCharID()], new Runnable() {
+                                @Override
+                                public void run() {
+                                    players[0].setCharFace(2);
+                                    players[1].setCharFace(1);
+                                }
+                            }, null);
+                    talkRenderer.addTalkToQueue(getGameTalk(TALK_LOSE, players[1].getCharID()),
+                            null,
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    players[0].setCharFace(0);
+                                    players[1].setCharFace(0);
+                                }
+                            });
+
                     this.players[0].setCharFace(2);
                     this.players[1].setCharFace(1);
                 }
@@ -1278,22 +1338,55 @@ public class BoardScreen extends BasicMenuScreen {
             if (this.currentPlayer == 0) {
                 this.showmessageOrder[0] = 0;
                 this.showmessageOrder[1] = 1;
-                this.players[0].setCharFace(1);
-                this.players[1].setCharFace(2);
-                System.out.println("Player combo talk: " + getGameTalk(TALK_MYCOMBO, players[1].getCharID()));
-                System.out.println("Player combo talk: "
-                        + strOPPONENTCOMBO[(players[1].getCharID() - 1) * 2 + Resource.getRand(2)]);
+
+                talkRenderer.addTalkToQueue(
+                        getGameTalk(TALK_MYCOMBO, players[1].getCharID()),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                players[0].setCharFace(1);
+                                players[1].setCharFace(2);
+                            }
+                        },
+                        null);
+
+                talkRenderer.addTalkToQueue(
+                        strOPPONENTCOMBO[(players[1].getCharID() - 1) * 2 + Resource.getRand(2)],
+                        null,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                players[0].setCharFace(0);
+                                players[1].setCharFace(0);
+                            }
+                        });
+
             } else {
                 this.showmessageOrder[0] = 1;
                 this.showmessageOrder[1] = 0;
                 this.players[0].setCharFace(2);
                 this.players[1].setCharFace(1);
-                System.out.println("AI combo talk: " + strMYCOMBO[players[1].getCharID()]);
-                System.out.println("AI combo talk: " + getGameTalk(TALK_OPPONENTCOMBO, players[1].getCharID()));
+
+                talkRenderer.addTalkToQueue(strMYCOMBO[players[1].getCharID()],
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                players[0].setCharFace(2);
+                                players[1].setCharFace(1);
+                            }
+                        },
+                        null);
+                talkRenderer.addTalkToQueue(getGameTalk(TALK_OPPONENTCOMBO, players[1].getCharID()),
+                        null,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                players[0].setCharFace(0);
+                                players[1].setCharFace(0);
+                            }
+                        });
             }
 
-            this.players[0].setCharFace(0);
-            this.players[1].setCharFace(0);
         }
 
         players[currentPlayer].endTurn();

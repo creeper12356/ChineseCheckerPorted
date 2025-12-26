@@ -389,7 +389,7 @@ public class Player {
      * @brief 结束回合
      */
     public void endTurn() {
-        this.charFace = 0;
+        // this.charFace = 0;
         if (this.jumpMove > 1) {
             this.accuCombo += this.jumpMove - 1;
         }
