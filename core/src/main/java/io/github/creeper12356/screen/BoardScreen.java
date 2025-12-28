@@ -387,8 +387,10 @@ public class BoardScreen extends BasicMenuScreen {
         // }
         this.timeOutCnt = 0;
 
-        talkRenderer = new ClassicTalkRenderer();
-        talkRenderer.setTalkTimeout(1.0f);
+        ClassicTalkRenderer classicTalkRenderer = new ClassicTalkRenderer();
+        classicTalkRenderer.setTalkBlockTimout(0.05f);
+        classicTalkRenderer.setTalkTimeout(1.0f);
+        this.talkRenderer = classicTalkRenderer;
     }
 
     @Override
@@ -1225,23 +1227,19 @@ public class BoardScreen extends BasicMenuScreen {
 
                     talkRenderer.addTalkToQueue(
                             getGameTalk(TALK_WIN, players[1].getCharID()),
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    players[0].setCharFace(1);
-                                    players[1].setCharFace(2);
-                                }
+                            () -> {
+                                players[0].setCharFace(1);
+                                players[1].setCharFace(2);
                             },
                             null);
                     talkRenderer.addTalkToQueue(
                             strLOSE[players[1].getCharID()],
                             null,
-                            new Runnable() {
-                                @Override
-                                public void run() {
+                            () -> {
+                                if (players[0].getCharFace() == 1)
                                     players[0].setCharFace(0);
+                                if (players[1].getCharFace() == 2)
                                     players[1].setCharFace(0);
-                                }
                             });
 
                     if (Resource.gameMode == Resource.GAMEMODE_STORY) {
@@ -1252,21 +1250,19 @@ public class BoardScreen extends BasicMenuScreen {
                     this.bWin = false;
 
                     talkRenderer.addTalkToQueue(
-                            strWIN[players[1].getCharID()], new Runnable() {
-                                @Override
-                                public void run() {
-                                    players[0].setCharFace(2);
-                                    players[1].setCharFace(1);
-                                }
-                            }, null);
+                            strWIN[players[1].getCharID()],
+                            () -> {
+                                players[0].setCharFace(2);
+                                players[1].setCharFace(1);
+                            },
+                            null);
                     talkRenderer.addTalkToQueue(getGameTalk(TALK_LOSE, players[1].getCharID()),
                             null,
-                            new Runnable() {
-                                @Override
-                                public void run() {
+                            () -> {
+                                if (players[0].getCharFace() == 2)
                                     players[0].setCharFace(0);
+                                if (players[1].getCharFace() == 1)
                                     players[1].setCharFace(0);
-                                }
                             });
 
                     this.players[0].setCharFace(2);
@@ -1341,24 +1337,18 @@ public class BoardScreen extends BasicMenuScreen {
 
                 talkRenderer.addTalkToQueue(
                         getGameTalk(TALK_MYCOMBO, players[1].getCharID()),
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                players[0].setCharFace(1);
-                                players[1].setCharFace(2);
-                            }
+                        () -> {
+                            players[0].setCharFace(1);
+                            players[1].setCharFace(2);
                         },
                         null);
 
                 talkRenderer.addTalkToQueue(
                         strOPPONENTCOMBO[(players[1].getCharID() - 1) * 2 + Resource.getRand(2)],
                         null,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                players[0].setCharFace(0);
-                                players[1].setCharFace(0);
-                            }
+                        () -> {
+                            if (players[0].getCharFace() == 1) players[0].setCharFace(0);
+                            if (players[1].getCharFace() == 2) players[1].setCharFace(0);
                         });
 
             } else {
@@ -1368,22 +1358,16 @@ public class BoardScreen extends BasicMenuScreen {
                 this.players[1].setCharFace(1);
 
                 talkRenderer.addTalkToQueue(strMYCOMBO[players[1].getCharID()],
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                players[0].setCharFace(2);
-                                players[1].setCharFace(1);
-                            }
+                        () -> {
+                            players[0].setCharFace(2);
+                            players[1].setCharFace(1);
                         },
                         null);
                 talkRenderer.addTalkToQueue(getGameTalk(TALK_OPPONENTCOMBO, players[1].getCharID()),
                         null,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                players[0].setCharFace(0);
-                                players[1].setCharFace(0);
-                            }
+                        () -> {
+                            if (players[0].getCharFace() == 2) players[0].setCharFace(0);
+                            if (players[1].getCharFace() == 1) players[1].setCharFace(0);
                         });
             }
 

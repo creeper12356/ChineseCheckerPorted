@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ClassicTalkRenderer implements TalkRenderer {
     private float talkTimeout = 5.0f; 
+    private float talkBlockTimeout = 0.05f;
 
     private final ConcurrentLinkedQueue<TalkItem> talkBlockQueue = new ConcurrentLinkedQueue<>();
     private float curTimeout = 0.0f;
@@ -31,6 +32,10 @@ public class ClassicTalkRenderer implements TalkRenderer {
     @Override
     public void setTalkTimeout(float timeout) {
         this.talkTimeout = timeout;
+    }
+
+    public void setTalkBlockTimout(float timeout) {
+        this.talkBlockTimeout = timeout;
     }
 
     @Override
@@ -66,7 +71,7 @@ public class ClassicTalkRenderer implements TalkRenderer {
             System.out.println("Show talk block: " + currentTalkBlock);
             System.out.println("Current timeout: " + curTimeout);
             curTimeout += delta;
-            if(curTimeout >= 0.05f) {
+            if(curTimeout >= talkBlockTimeout) {
                 curTimeout = 0.0f;
             } 
         } else if (queueState == QUEUE_STATE_EXPIRE) {
